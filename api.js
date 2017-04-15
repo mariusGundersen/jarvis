@@ -1,7 +1,7 @@
 
 module.exports = {
   allOn,
-  allOf,
+  allOff,
   listScenes,
   activateScene
 }
