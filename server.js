@@ -15,12 +15,18 @@ const style = `
 * {
   margin: 0;
   padding: 0;
+  cursor: none;
+}
+
+html, body {
+  height: 100%;
 }
 
 body {
   display: flex;
+  justify-content: space-between;
   flex-direction: column;
-  background: black;
+  background: white;
 }
 
 #scenes {
@@ -58,7 +64,7 @@ for(const button of document.querySelectorAll('button[data-id]')){
 }
 
 function refreshMeteogram() {
-  document.querySelector('#meteogram').src = 'https://www.yr.no/place/Norway/Oslo/Oslo/Oslo/meteogram.png?time='+Date.now();
+  document.querySelector('#meteogram').src = 'https://www.yr.no/sted/Norge/Oslo/Oslo/Oslo/meteogram.png?time='+Date.now();
   setTimeout(refreshMeteogram, 10000);
 };
 
@@ -69,19 +75,23 @@ router.get('/', async function(ctx){
   const scenes = [
     {
       name: 'Off',
-      background: '#223'
+      background: '#223',
+      color: 'white'
     },
     {
       name: 'Nightlight',
-      background: '#4e2c0b'
+      background: '#4e2c0b',
+      color: 'white'
     },
     {
       name: 'Relax',
-      background: '#e3bc18'
+      background: '#e3bc18',
+      color: 'black'
     },
     {
       name: 'Bright',
-      background: '#ffff00'
+      background: '#ffff00',
+      color: 'black'
     }
   ];
   ctx.type = 'html';
@@ -124,7 +134,15 @@ app.listen(3000);
 
 function sceneButton(scene){
   return template`
-  <button class="scene" data-id="${scene.name}" style="background: ${scene.background}">${scene.name}</button>
+  <button
+    class="scene"
+    data-id="${scene.name}"
+    style="
+      background: ${scene.background};
+      color: ${scene.color}
+    ">
+      ${scene.name}
+    </button>
   `
 }
 
