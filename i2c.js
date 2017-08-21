@@ -85,7 +85,7 @@ exports.getAcceleration = getAcceleration;
 
 initialize().then(async () => {
   while(true){
-    console.log(getAcceleration());
+    console.log(await getAcceleration());
     await delay(1000);
   }
 }).catch(r => console.error(r));
