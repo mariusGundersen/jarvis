@@ -1,0 +1,40 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  cursor: none;
+}
+html, body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  background: white;
+}
+
+#scenes {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin-bottom: 25px;
+}
+
+#scenes .scene {
+  display: block;
+  flex: 1 0 auto;
+  text-align: center;
+  padding: 25px;
+  background: #223;
+  border: none;
+  color: #777;
+  font-weight: bold;
+}
+
+#meteogram-wrapper {
+  display: flex;
+  justify-content: center;
+}

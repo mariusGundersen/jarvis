@@ -1,6 +1,8 @@
 const HueApi = require('node-hue-api').HueApi;
 const Koa = require('koa');
+const serve = require('koa-static');
 const Router = require('koa-router');
+const GpioPin = require('gpio-promise');
 
 const config = require('./.philips-hue.json');
 const api = require('./api.js');
@@ -10,66 +12,6 @@ const hub = new HueApi(config.bridge, config.username);
 const app = new Koa();
 
 const router = new Router();
-
-const style = `
-* {
-  margin: 0;
-  padding: 0;
-  cursor: none;
-}
-
-html, body {
-  height: 100%;
-}
-
-body {
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-  background: white;
-}
-
-#scenes {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  margin-bottom: 25px;
-}
-
-#scenes .scene {
-  display: block;
-  flex: 1 0 auto;
-  text-align: center;
-  padding: 25px;
-  background: #223;
-  border: none;
-  color: #777;
-  font-weight: bold;
-}
-
-#meteogram-wrapper {
-  display: flex;
-  justify-content: center;
-}
-`;
-
-const script = `
-for(const button of document.querySelectorAll('button[data-id]')){
-  button.addEventListener('click', e => {
-    fetch('/scene/'+button.getAttribute('data-id'), {
-      method: 'POST'
-    });
-  });
-}
-
-function refreshMeteogram() {
-  document.querySelector('#meteogram').src = 'https://www.yr.no/sted/Norge/Oslo/Oslo/Oslo/meteogram.png?time='+Date.now();
-  setTimeout(refreshMeteogram, 10000);
-};
-
-refreshMeteogram();
-`;
 
 router.get('/', async function(ctx){
   const scenes = [
@@ -98,9 +40,7 @@ router.get('/', async function(ctx){
   ctx.body = template`<!doctype html>
   <html>
     <head>
-      <style>
-        ${style}
-      </style>
+      <link rel="stylesheet" href="/static/style.css" />
     </head>
     <body>
       <div id="scenes">
@@ -109,9 +49,7 @@ router.get('/', async function(ctx){
       <div id="meteogram-wrapper">
         <img id="meteogram" src="https://www.yr.no/place/Norway/Oslo/Oslo/Oslo/meteogram.png" />
       </div>
-      <script>
-        ${script}
-      </script>
+      <script src="/static/script.js"></script>
     </body>
   </html>`;
 });
@@ -128,9 +66,27 @@ router.post('/scene/:name', async function(ctx){
   };
 });
 
+let sleepTimeout = setTimeout(fallAsleep, 1000*60);
+router.post('/awake', async function(ctx){
+  await wakeUp();
+  clearTimeout(sleepTimeout);
+  sleepTimeout = setTimeout(fallAsleep, 1000*60);
+})
+
+app.use(serve('./static'));
 app.use(router.routes());
 
 app.listen(3000);
+
+const bgLed = new GpioPin(362);
+async function wakeUp(){
+  await bgLed.out();
+  await bgLed.low();
+}
+
+async function fallAsleep(){
+  await bgLed.in();
+}
 
 function sceneButton(scene){
   return template`
