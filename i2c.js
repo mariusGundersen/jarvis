@@ -45,7 +45,7 @@ async function getAcceleration() {
   // Loop to calculate 12-bit ADC and g value for each axis
   const out = [];
   for (let i = 0; i < 3 ; i++) {
-    const gCount = (rawData[i*2] << 8) | rawData[(i*2)+1];  //Combine the two 8 bit registers into one 12-bit number
+    let gCount = (rawData[i*2] << 8) | rawData[(i*2)+1];  //Combine the two 8 bit registers into one 12-bit number
 
     gCount = (gCount >> 4); //The registers are left align, here we right align the 12-bit integer
 
@@ -83,4 +83,13 @@ async function initialize() {
 exports.initialize = initialize;
 exports.getAcceleration = getAcceleration;
 
-initialize().then(() => getAcceleration()).then(r => console.log(r));
+initialize().then(async () => {
+  while(true){
+    console.log(getAcceleration());
+    await delay(1000);
+  }
+}).catch(r => console.error(r));
+
+function delay(t){
+  return new Promise(res => setTimeout(res, t));
+}
