@@ -40,7 +40,7 @@ router.get('/', async function(ctx){
   ctx.body = template`<!doctype html>
   <html>
     <head>
-      <link rel="stylesheet" href="/static/style.css" />
+      <link rel="stylesheet" href="/style.css" />
     </head>
     <body>
       <div id="scenes">
@@ -49,7 +49,7 @@ router.get('/', async function(ctx){
       <div id="meteogram-wrapper">
         <img id="meteogram" src="https://www.yr.no/place/Norway/Oslo/Oslo/Oslo/meteogram.png" />
       </div>
-      <script src="/static/script.js"></script>
+      <script src="/script.js"></script>
     </body>
   </html>`;
 });
