@@ -68,7 +68,7 @@ router.post('/scene/:name', async function(ctx){
 
 let sleepTimeout = setTimeout(fallAsleep, 1000*60);
 router.post('/awake', async function(ctx){
-  await wakeUp();
+  await wakeUp().catch(logError);
   clearTimeout(sleepTimeout);
   sleepTimeout = setTimeout(fallAsleep, 1000*60);
 })
@@ -88,7 +88,11 @@ async function wakeUp(){
 
 async function fallAsleep(){
   console.log('fall asleep');
-  await bgLed.in();
+  await bgLed.in().catch(logError);
+}
+
+function logError(e){
+  console.error(e);
 }
 
 function sceneButton(scene){
