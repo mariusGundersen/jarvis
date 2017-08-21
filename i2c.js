@@ -19,12 +19,12 @@ function read_registers(addressToRead, bytesToRead) {
 }
 
 function read_register(addressToRead) {
-  return new Promise((res, rej) => wire.readByte(addressToRead, (err, byte) => err ? rej(err) : res(byte)));
+  return new Promise((res, rej) => wire.readBytes(addressToRead, 1, (err, bytes) => err ? rej(err) : res(bytes[0])));
 }
 
 // Write a single byte to the register.
 function write_register(addressToWrite, dataToWrite) {
-  return new Promise((res, rej) => wire.writeByte(addressToWrite, dataToWrite, (err) => err ? rej(err) : res()));
+  return new Promise((res, rej) => wire.writeBytes(addressToWrite, [dataToWrite], (err) => err ? rej(err) : res()));
 }
 
 // Sets the MMA8452 to standby mode. It must be in standby to change most register settings
@@ -83,4 +83,4 @@ async function initialize() {
 exports.initialize = initialize;
 exports.getAcceleration = getAcceleration;
 
-initialize().then(getAcceleration()).then(r => console.log(r));
+initialize().then(() => getAcceleration()).then(r => console.log(r));
