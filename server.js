@@ -77,14 +77,17 @@ app.use(serve('./static'));
 app.use(router.routes());
 
 app.listen(3000);
+console.log('listening on port 3000');
 
 const bgLed = new GpioPin(362);
 async function wakeUp(){
+  console.log('wake up');
   await bgLed.out();
   await bgLed.low();
 }
 
 async function fallAsleep(){
+  console.log('fall asleep');
   await bgLed.in();
 }
 
