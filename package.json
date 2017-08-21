@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "gpio-promise": "^1.1.2",
+    "i2c": "^0.2.3",
     "koa": "^2.2.0",
     "koa-router": "^7.1.1",
     "koa-static": "^4.0.1",
