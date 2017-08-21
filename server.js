@@ -2,10 +2,10 @@ const HueApi = require('node-hue-api').HueApi;
 const Koa = require('koa');
 const serve = require('koa-static');
 const Router = require('koa-router');
-const GpioPin = require('gpio-promise');
 
 const config = require('./.philips-hue.json');
 const api = require('./api.js');
+const screen = require('./screen.js');
 
 const hub = new HueApi(config.bridge, config.username);
 
@@ -66,11 +66,8 @@ router.post('/scene/:name', async function(ctx){
   };
 });
 
-let sleepTimeout = setTimeout(fallAsleep, 1000*60);
 router.post('/awake', async function(ctx){
-  await wakeUp().catch(logError);
-  clearTimeout(sleepTimeout);
-  sleepTimeout = setTimeout(fallAsleep, 1000*60);
+  await screen.wakeUp();
 })
 
 app.use(serve('./static'));
@@ -79,21 +76,6 @@ app.use(router.routes());
 app.listen(3000);
 console.log('listening on port 3000');
 
-const bgLed = new GpioPin(362);
-async function wakeUp(){
-  console.log('wake up');
-  await bgLed.out();
-  await bgLed.low();
-}
-
-async function fallAsleep(){
-  console.log('fall asleep');
-  await bgLed.in().catch(logError);
-}
-
-function logError(e){
-  console.error(e);
-}
 
 function sceneButton(scene){
   return template`
