@@ -6,8 +6,10 @@ for(const button of document.querySelectorAll('button[data-id]')){
   });
 }
 
-function refreshMeteogram() {
-  document.querySelector('#meteogram').src = 'https://www.yr.no/sted/Norge/Oslo/Oslo/Oslo/meteogram.png?time='+Date.now();
+async function refreshMeteogram() {
+  const result = await fetch('https://www.yr.no/sted/Norge/Oslo/Oslo/Oslo/meteogram.png', {cache: 'reload'});
+  const blob = await result.blob();
+  document.querySelector('#meteogram').src = URL.createObjectURL(blob);
   setTimeout(refreshMeteogram, 10000);
 };
 
