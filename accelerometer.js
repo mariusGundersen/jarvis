@@ -10,7 +10,7 @@ exports.start = function(onMotion){
     await interrupt.in();
     interrupt.on('rising-edge', async function(value) {
       if(value){
-        await onMotion();
+        await onMotion().catch(e => console.warn(e));
         console.log('change', value, (await i2c.getInterrupt()).toString(16));
       }
    });
