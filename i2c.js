@@ -11,6 +11,21 @@ const OUT_X_MSB = 0x01;
 const XYZ_DATA_CFG = 0x0E;
 const WHO_AM_I = 0x0D;
 const CTRL_REG1 = 0x2A;
+const FF_MT_CFG = 0x15;
+const FF_MT_THS = 0x17;
+const FF_MT_COUNT = 0x18;
+const CTRL_REG3 = 0x2C;
+const CTRL_REG4 = 0x2D;
+
+const ELE = 1<<7;
+const OAE = 1<<6;
+const ZEFE = 1<<5;
+const YEFE = 1<<4;
+const XEFE = 1<<3;
+const DBCNTM = 1<<7;
+const WAKE_FF_MT = 1<<3;
+const IPOL = 1<<1;
+const INT_EN_FF_MT = 1<<2;
 
 const wire = new i2c(address, {device: '/dev/i2c-1'}); // point to your i2c address, debug provides REPL interface
 
@@ -60,7 +75,6 @@ async function getAcceleration() {
 }
 
 async function initialize() {
-
   const c = await read_register(WHO_AM_I);  // Read WHO_AM_I register
   if (c == 0x2A) { // WHO_AM_I should always return 0x2A
     console.log("MMA8452Q is online...");
@@ -75,6 +89,11 @@ async function initialize() {
   if (fsr > 8) fsr = 8; //Easy error check
   fsr >>= 2; // Neat trick, see page 22. 00 = 2G, 01 = 4A, 10 = 8G
   await write_register(XYZ_DATA_CFG, fsr);
+  await write_register(FF_MT_CFG, ELE | OAE | ZEFE | YEFE | XEFE);
+  await write_register(FF_MT_THS, DBCNTM | 1);
+  await write_register(FF_MT_COUNT, 1);
+  await write_register(CTRL_REG3, WAKE_FF_MT | IPOL);
+  await write_register(CTRL_REG4, INT_EN_FF_MT);
 
   // The default data rate is 800Hz and we don't modify it in this example code
   await mode_active();  // Set to active to start reading
@@ -82,14 +101,3 @@ async function initialize() {
 
 exports.initialize = initialize;
 exports.getAcceleration = getAcceleration;
-
-initialize().then(async () => {
-  while(true){
-    console.log(await getAcceleration());
-    await delay(1000);
-  }
-}).catch(r => console.error(r));
-
-function delay(t){
-  return new Promise(res => setTimeout(res, t));
-}
