@@ -104,5 +104,5 @@ function template(strings, ...objects){
 }
 
 function delay(ms){
-  return new Promise(res => setTimeout(ms, res));
+  return new Promise(res => setTimeout(res, ms));
 }
