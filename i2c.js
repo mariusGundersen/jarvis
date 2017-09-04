@@ -12,6 +12,7 @@ const XYZ_DATA_CFG = 0x0E;
 const WHO_AM_I = 0x0D;
 const CTRL_REG1 = 0x2A;
 const FF_MT_CFG = 0x15;
+const FF_MT_SRC = 0x16;
 const FF_MT_THS = 0x17;
 const FF_MT_COUNT = 0x18;
 const CTRL_REG3 = 0x2C;
@@ -97,10 +98,15 @@ async function initialize() {
     console.log('reg', i.toString(16), (await read_register(i)).toString(16));
   }
   // The default data rate is 800Hz and we don't modify it in this example code
-  //await mode_active();  // Set to active to start reading
+  await mode_active();  // Set to active to start reading
+}
+
+async function getInterrupt(){
+  return await read_register(FF_MT_SRC);
 }
 
 exports.initialize = initialize;
 exports.getAcceleration = getAcceleration;
 exports.mode_active = mode_active;
 exports.mode_standby = mode_standby;
+exports.getInterrupt = getInterrupt;
