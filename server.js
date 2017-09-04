@@ -60,6 +60,8 @@ router.get('/scene', async function(ctx){
   ctx.body = scenes;
 });
 
+api.listScenes(hub).then(c => console.log(c));
+
 router.post('/scene/:name', async function(ctx){
   await api.activateScene(hub, ctx.params.name);
   ctx.body = {
