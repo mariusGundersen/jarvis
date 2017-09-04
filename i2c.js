@@ -89,7 +89,7 @@ async function initialize() {
   await write_register(XYZ_DATA_CFG, GSCALE >> 2);
   await write_register(FF_MT_CFG, ELE | OAE | ZEFE | YEFE | XEFE);
   await write_register(FF_MT_THS, DBCNTM | 1);
-  await write_register(FF_MT_COUNT, 1);
+  await write_register(FF_MT_COUNT, 0xff);
   await write_register(CTRL_REG3, WAKE_FF_MT | IPOL);
   await write_register(CTRL_REG4, INT_EN_FF_MT);
 
