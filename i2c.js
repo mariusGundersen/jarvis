@@ -87,7 +87,7 @@ async function initialize() {
   // Set up the full scale range to 2, 4, or 8g.
   // 00 = 2G, 01 = 4A, 10 = 8G
   await write_register(XYZ_DATA_CFG, GSCALE >> 2);
-  await write_register(FF_MT_CFG, ELE | OAE | ZEFE | YEFE | XEFE);
+  await write_register(FF_MT_CFG, ELE | OAE | ZEFE);
   await write_register(FF_MT_THS, DBCNTM | 1);
   await write_register(FF_MT_COUNT, 0xff);
   await write_register(CTRL_REG3, WAKE_FF_MT | IPOL);
