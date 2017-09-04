@@ -6,6 +6,7 @@ const Router = require('koa-router');
 const config = require('./.philips-hue.json');
 const api = require('./api.js');
 const screen = require('./screen.js');
+const accelerometer = require('./accelerometer.js');
 
 const hub = new HueApi(config.bridge, config.username);
 
@@ -76,6 +77,10 @@ app.use(router.routes());
 app.listen(3000);
 console.log('listening on port 3000');
 
+accelerometer.start(async function(){
+  await screen.wakeUp();
+  await api.allOn(hub);
+})
 
 function sceneButton(scene){
   return template`
