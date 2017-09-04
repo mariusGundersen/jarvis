@@ -79,7 +79,7 @@ console.log('listening on port 3000');
 
 accelerometer.start(async function(){
   await screen.wakeUp();
-  await api.allOn(hub);
+  await api.activateScene(hub, 'Relax');
 })
 
 function sceneButton(scene){
