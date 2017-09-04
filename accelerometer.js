@@ -7,7 +7,7 @@ i2c.initialize().then(async () => {
   await i2c.getInterrupt();
   await interrupt.in();
   interrupt.on('change', async function(value) {
-    console.log('change', value, await i2c.getInterrupt());
+    console.log('change', value, (await i2c.getInterrupt()).toString(16));
  });
 }).catch(r => console.error(r));
 
