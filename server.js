@@ -82,7 +82,8 @@ console.log('listening on port 3000');
 accelerometer.start(async function(){
   await screen.wakeUp();
   await api.activateScene(hub, 'Bright');
-})
+  await delay(1000);
+});
 
 function sceneButton(scene){
   return template`
@@ -100,4 +101,8 @@ function sceneButton(scene){
 
 function template(strings, ...objects){
   return String.raw(strings, ...objects.map(o => Array.isArray(o) ? o.join('') : o))
+}
+
+function delay(ms){
+  return new Promise(res => window.setTimeout(ms, res));
 }
