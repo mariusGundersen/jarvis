@@ -6,7 +6,7 @@ const interrupt = new GpioPin(71); //pin 11
 i2c.initialize().then(async () => {
   await i2c.getInterrupt();
   await interrupt.in();
-  interrupt.on('rising', async function(value) {
+  interrupt.on('rising-edge', async function(value) {
     if(value){
       console.log('change', value, (await i2c.getInterrupt()).toString(16));
     }
