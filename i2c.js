@@ -85,19 +85,22 @@ async function initialize() {
   await mode_standby();  // Must be in standby to change registers
 
   // Set up the full scale range to 2, 4, or 8g.
-  let fsr = GSCALE;
-  if (fsr > 8) fsr = 8; //Easy error check
-  fsr >>= 2; // Neat trick, see page 22. 00 = 2G, 01 = 4A, 10 = 8G
-  await write_register(XYZ_DATA_CFG, fsr);
+  // 00 = 2G, 01 = 4A, 10 = 8G
+  await write_register(XYZ_DATA_CFG, GSCALE >> 2);
   await write_register(FF_MT_CFG, ELE | OAE | ZEFE | YEFE | XEFE);
   await write_register(FF_MT_THS, DBCNTM | 1);
   await write_register(FF_MT_COUNT, 1);
   await write_register(CTRL_REG3, WAKE_FF_MT | IPOL);
   await write_register(CTRL_REG4, INT_EN_FF_MT);
 
+  for(let i=0; i<0x31; i++){
+    console.log('reg', i, await read_register(i));
+  }
   // The default data rate is 800Hz and we don't modify it in this example code
-  await mode_active();  // Set to active to start reading
+  //await mode_active();  // Set to active to start reading
 }
 
 exports.initialize = initialize;
 exports.getAcceleration = getAcceleration;
+exports.mode_active = mode_active;
+exports.mode_standby = mode_standby;
