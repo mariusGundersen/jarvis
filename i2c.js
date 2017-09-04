@@ -94,7 +94,7 @@ async function initialize() {
   await write_register(CTRL_REG4, INT_EN_FF_MT);
 
   for(let i=0; i<0x31; i++){
-    console.log('reg', i, await read_register(i));
+    console.log('reg', i.toString(16), (await read_register(i)).toString(16));
   }
   // The default data rate is 800Hz and we don't modify it in this example code
   //await mode_active();  // Set to active to start reading
