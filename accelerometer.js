@@ -8,7 +8,6 @@ exports.start = function start(onMotion){
     console.log('setup interrupt');
     await i2c.getInterrupt();
     await interrupt.in();
-    console.log('on rising edge');
     interrupt.on('rising-edge', async function(value) {
       console.log('rising-edge', value);
       if(value){
@@ -16,6 +15,8 @@ exports.start = function start(onMotion){
         console.log('change', value, (await i2c.getInterrupt()).toString(16));
       }
    });
+   const r = await i2c.getInterrupt();
+   console.log('on rising edge', r);
   }).catch(r => console.error(r));
 }
 
