@@ -85,13 +85,27 @@ async function initialize() {
 
   await mode_standby();  // Must be in standby to change registers
 
-  // Set up the full scale range to 2, 4, or 8g.
-  // 00 = 2G, 01 = 4A, 10 = 8G
+  // Set scale to GSCAL (2g)
   await write_register(XYZ_DATA_CFG, GSCALE >> 2);
+
+  // ELE: disable interrupt until FF_MT_SRC is read
+  // OAE: Detect motion (not free-fall)
+  // ZEFE: detect in Z direction
+  // YEFE: detect in Y direction
   await write_register(FF_MT_CFG, ELE | OAE | ZEFE | YEFE);
+
+  // DBCNTM: clear debounce counter imediately
+  // threshold for motion (0.063g*2 = 0.126g)
   await write_register(FF_MT_THS, DBCNTM | 2);
+
+  // debounce time (0x80*1.25ms=160ms)
   await write_register(FF_MT_COUNT, 0x80);
+
+  // WAKE_FF_MT: wake up on motion
+  // IPOL: interrupt is active high (rising edge)
   await write_register(CTRL_REG3, WAKE_FF_MT | IPOL);
+
+  // INT_EN_FF_MT: interrupt on free-fall and/or motion
   await write_register(CTRL_REG4, INT_EN_FF_MT);
 
   for(let i=0; i<0x31; i++){
