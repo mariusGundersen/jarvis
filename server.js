@@ -71,7 +71,11 @@ router.post('/scene/:name', async function(ctx){
 
 router.post('/awake', async function(ctx){
   await screen.wakeUp();
-})
+});
+
+router.post('/sleep', async function(ctx){
+  await screen.fallAsleep();
+});
 
 app.use(serve('./static'));
 app.use(router.routes());

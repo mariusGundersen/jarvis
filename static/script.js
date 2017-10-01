@@ -16,7 +16,17 @@ async function refreshMeteogram() {
 refreshMeteogram();
 
 document.addEventListener('mousedown', e => {
+  clearTimeout(sleepy);
+  sleepy = setTimeout(fallAsleep, 1000*60);
   fetch('/awake', {
     method: 'POST'
   });
 }, false);
+
+let sleepy = setTimeout(fallAsleep, 1000*60);
+
+function fallAsleep(){
+  fetch('/sleep', {
+    method: 'POST'
+  });
+}
