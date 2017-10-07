@@ -1,6 +1,6 @@
 const HueApi = require('node-hue-api').HueApi;
 
-exports = class Hub{
+module.exports = class Hub{
   constructor(config){
     this.hub = new HueApi(config.bridge, config.username);
   }
