@@ -90,9 +90,10 @@ async function initialize() {
 
   // ELE: disable interrupt until FF_MT_SRC is read
   // OAE: Detect motion (not free-fall)
-  // ZEFE: detect in Z direction
+  // XEFE: detect in X direction
   // YEFE: detect in Y direction
-  await write_register(FF_MT_CFG, ELE | OAE | ZEFE | YEFE);
+  // ZEFE: detect in Z direction
+  await write_register(FF_MT_CFG, ELE | OAE | ZEFE | XEFE);
 
   // DBCNTM: clear debounce counter imediately
   // threshold for motion (0.063g*2 = 0.126g)
