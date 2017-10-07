@@ -87,7 +87,7 @@ accelerometer.start(async function(){
   await screen.wakeUp();
   await api.activateScene(hub, 'Bright');
   await delay(1000);
-});
+}).catch(r => console.error(r));
 
 function sceneButton(scene){
   return template`

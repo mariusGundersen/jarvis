@@ -18,6 +18,6 @@ exports.start = async function start(onMotion){
   });
   const r = await i2c.getInterrupt();
   console.log('on rising edge', r);
-}.catch(r => console.error(r));
+};
 
 //exports.start();
