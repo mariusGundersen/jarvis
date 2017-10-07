@@ -17,21 +17,21 @@ exports.start = async function(){
   }).catch(r => console.error(r));
 }
 
-exports.wakeUp = function(){
+exports.wakeUp = async function(){
   await screen.wakeUp();
   lastTouchAt = Date.now();
 }
 
-exports.fallAsleep = function(){
+exports.fallAsleep = async function(){
   await screen.fallAsleep();
 }
 
-exports.activateScene = function(name){
+exports.activateScene = async function(name){
   await hub.activateScene(name);
 }
 
-exports.listScenes = function(){
-  return hub.listScenes();
+exports.listScenes = async function(){
+  return await hub.listScenes();
 }
 
 function delay(ms){
