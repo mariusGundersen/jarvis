@@ -26,6 +26,6 @@ module.exports = class Gpio extends onoff.Gpio{
   }
 
   async high(){
-    await this.writ(1);
+    await this.write(1);
   }
 }
