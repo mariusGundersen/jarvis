@@ -1,12 +1,16 @@
-const {promisify} = require('util');
 const onoff = require('onoff');
 
 module.exports = class Gpio extends onoff.Gpio{
   constructor(...args){
     super(...args);
+  }
 
-    this.read = promisify(super.read);
-    this.write = promisify(super.write);
+  async read(){
+    return new Promise((res, rej) => super.read((err, val) => err ? rej(err) : res(val)));
+  }
+
+  async write(value){
+    return new Promise((res, rej) => super.write(value, (err, val) => err ? rej(err) : res(val)));
   }
 
   async out(){
