@@ -23,6 +23,10 @@ router.post('/scene/:name', async function(ctx){
   };
 });
 
+router.get('/bikes', async function(ctx){
+  ctx.body = await backend.getBikeStatus();
+});
+
 router.post('/awake', async function(ctx){
   await backend.wakeUp();
 });

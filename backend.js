@@ -1,10 +1,12 @@
-const config = require('./.philips-hue.json');
+const config = require('./config.json');
 const Hub = require('./Hub.js');
+const Bikes = require('./Bikes.js');
 
 const screen = require('./screen.js');
 const accelerometer = require('./accelerometer.js');
 
-const hub = new Hub(config);
+const hub = new Hub(config.hue);
+const bikes = new Bikes(config.bikes['api-key']);
 let lastTouchAt = Date.now();
 
 exports.start = async function(){
@@ -31,6 +33,10 @@ exports.activateScene = async function(name){
 
 exports.listScenes = async function(){
   return await hub.listScenes();
+}
+
+exports.getBikeStatus = async function(){
+  return await bikes.getStatus();
 }
 
 function delay(ms){

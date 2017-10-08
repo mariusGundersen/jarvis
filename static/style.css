@@ -20,7 +20,6 @@ body {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
-  margin-bottom: 25px;
 }
 
 #scenes .scene {
@@ -37,4 +36,42 @@ body {
 #meteogram-wrapper {
   display: flex;
   justify-content: center;
+  align-items: flex-start;
+}
+
+#meteogram {
+  /*width: 489px;*/
+  width: 771px;
+}
+
+#map {
+}
+
+#map line {
+  stroke: black;
+}
+
+#map line.ring2 {
+  stroke-width: 2;
+}
+
+#map path.river {
+  stroke: #139;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: square;
+}
+
+#map path.home {
+  fill: gold;
+}
+
+#map circle.bike-circle {
+  fill: white;
+  stroke: black;
+  stroke-width: 0.5;
+}
+
+#map text.bike-text {
+  font-size: 4px;
 }
