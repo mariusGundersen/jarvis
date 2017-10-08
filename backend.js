@@ -10,7 +10,6 @@ let lastTouchAt = Date.now();
 exports.start = async function(){
   await accelerometer.start(async () => {
     if(Date.now() - lastTouchAt > 1000*60){
-      await screen.wakeUp();
       await hub.activateScene('Bright');
     }
     await delay(1000);
