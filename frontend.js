@@ -88,8 +88,8 @@ const map = (racks) => template`<svg id="map" width="535" height="535" viewBox="
 </svg>`;
 
 const bikeStop = (rack) => template`
-<circle cx="${rack.x}" cy="${rack.y}" r="2" class="bike-circle" data-id="${rack.id}" />
-<text x="${rack.x}" y="${rack.y}" text-anchor="middle" alignment-baseline="middle" class="bike-text" data-id="${rack.id}">?</text>`;
+<circle cx="${rack.x}" cy="${rack.y}" r="2" class="bike-circle" data-id="${rack.id}" />`;
+//<text x="${rack.x}" y="${rack.y}" text-anchor="middle" alignment-baseline="middle" class="bike-text" data-id="${rack.id}">?</text>`;
 
 const sceneButton = (scene) => template`
   <button

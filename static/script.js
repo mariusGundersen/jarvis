@@ -48,7 +48,10 @@ async function updateBikes(){
   }
   for(const rack of document.querySelectorAll('.bike-circle')){
     const availability = map.get(rack.getAttribute('data-id'));
-    rack.style.fill = fade(availability.bikes/7);
+    const percentage = availability.bikes < 7
+      ? availability.bikes/7*0.9
+      : 0.9 + 0.1*(1 - 1/(availability.bikes - 6));
+    rack.style.fill = fade(percentage);
   }
 }
 
