@@ -2,9 +2,13 @@ const config = require('./config.json');
 const Hub = require('./Hub.js');
 const Bikes = require('./Bikes.js');
 
-const screen = require('./screen.js');
-const accelerometer = require('./accelerometer.js');
+const Screen = require('./Screen.js');
+const Accelerometer = require('./Accelerometer.js');
 
+const debug = process.env.DEBUG == "true" ? {dummy:true} : undefined;
+
+const screen = new Screen(debug);
+const accelerometer = new Accelerometer(debug);
 const hub = new Hub(config.hue);
 const bikes = new Bikes(config.bikes['api-key']);
 let lastTouchAt = Date.now();
