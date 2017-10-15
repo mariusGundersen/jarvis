@@ -4,6 +4,7 @@
   padding: 0;
   cursor: none;
 }
+
 html, body {
   height: 100%;
   overflow: hidden;
@@ -43,6 +44,7 @@ body {
 #meteogram {
   /*width: 489px;*/
   width: 771px;
+  flex: 0 0 771px;
 }
 
 #map {
