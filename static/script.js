@@ -10,8 +10,9 @@ async function refreshMeteogram() {
   const result = await fetch('https://www.yr.no/sted/Norge/Oslo/Oslo/Oslo/meteogram.png', {cache: 'reload'});
   const blob = await result.blob();
   document.querySelector('#meteogram').src = URL.createObjectURL(blob);
-  setTimeout(refreshMeteogram, 1000*60*15);
 };
+
+document.querySelector('#meteogram').addEventListener('click', refreshMeteogram);
 
 refreshMeteogram();
 
@@ -20,6 +21,7 @@ let isAsleep = false;
 document.addEventListener('mousedown', e => {
   if(isAsleep){
     updateBikes();
+    refreshMeteogram();
     fetch('/awake', {
       method: 'POST'
     });
@@ -54,6 +56,8 @@ async function updateBikes(){
     rack.style.fill = fade(percentage);
   }
 }
+
+document.querySelector('#map').addEventListener('click', updateBikes);
 
 updateBikes();
 
