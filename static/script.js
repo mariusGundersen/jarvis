@@ -11,7 +11,7 @@ for(const button of document.querySelectorAll('button[data-id]')){
         time--;
         button.textContent = time;
         if(time === 0){
-          await setScene('Sleep');
+          await setScene('Off');
           cancelSleep();
         }
       }, 1000);
