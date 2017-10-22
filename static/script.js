@@ -1,8 +1,34 @@
+let cancelSleep = null;
 for(const button of document.querySelectorAll('button[data-id]')){
-  button.addEventListener('click', e => {
-    fetch('/scene/'+button.getAttribute('data-id'), {
-      method: 'POST'
-    });
+  button.addEventListener('click', async e => {
+    const scene = button.getAttribute('data-id');
+    if(cancelSleep) cancelSleep();
+    if(scene === 'Sleep'){
+      await setScene('Nightlight');
+      let time = 60;
+      button.textContent = time;
+      const sleepIntval = setInterval(async () => {
+        time--;
+        button.textContent = time;
+        if(time === 0){
+          await setScene('Sleep');
+          cancelSleep();
+        }
+      }, 1000);
+      cancelSleep = () => {
+        button.textContent = 'Sleep';
+        clearInterval(sleepIntval);
+        cancelSleep = null;
+      }
+    }else{
+      await setScene(scene);
+    }
+  });
+}
+
+async function setScene(name){
+  await fetch(`/scene/${name}`, {
+    method: 'POST'
   });
 }
 

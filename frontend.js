@@ -6,6 +6,11 @@ const scenes = [
     color: 'white'
   },
   {
+    name: 'Sleep',
+    background: 'linear-gradient(to right, #7d7e7d 0%,#222233 0%,#4e2c0b 100%)',
+    color: 'white'
+  },
+  {
     name: 'Nightlight',
     background: '#4e2c0b',
     color: 'white'
