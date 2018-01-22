@@ -96,8 +96,8 @@ async function initialize() {
   await write_register(FF_MT_CFG, ELE | OAE | ZEFE | XEFE);
 
   // DBCNTM: clear debounce counter imediately
-  // threshold for motion (0.063g*2 = 0.126g)
-  await write_register(FF_MT_THS, DBCNTM | 2);
+  // threshold for motion (0.063g*1 = 0.063g)
+  await write_register(FF_MT_THS, DBCNTM | 1);
 
   // debounce time (0x80*1.25ms=160ms)
   await write_register(FF_MT_COUNT, 0x80);

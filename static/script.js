@@ -33,7 +33,7 @@ async function setScene(name){
 }
 
 async function refreshMeteogram() {
-  const result = await fetch('https://www.yr.no/sted/Norge/Oslo/Oslo/Oslo/meteogram.png', {cache: 'reload'});
+  const result = await fetch('https://www.yr.no/sted/Norge/Oslo/Oslo/Oslo/meteogram.png', {cache: 'no-store'});
   const blob = await result.blob();
   document.querySelector('#meteogram').src = URL.createObjectURL(blob);
 };
@@ -45,6 +45,10 @@ refreshMeteogram();
 let isAsleep = false;
 
 document.addEventListener('mousedown', e => {
+  if (!document.mozFullscreenElement) {
+    document.documentElement.mozRequestFullscreen();
+  }
+
   if(isAsleep){
     updateBikes();
     refreshMeteogram();
