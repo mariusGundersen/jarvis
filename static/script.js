@@ -45,8 +45,8 @@ refreshMeteogram();
 let isAsleep = false;
 
 document.addEventListener('mousedown', e => {
-  if (!document.mozFullscreenElement) {
-    document.documentElement.mozRequestFullscreen();
+  if (!document.mozFullScreenElement) {
+    document.documentElement.mozRequestFullScreen();
   }
 
   if(isAsleep){
