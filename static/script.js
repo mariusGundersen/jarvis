@@ -32,8 +32,11 @@ async function setScene(name){
   });
 }
 
+let requestCounter = 0;
+
 async function refreshMeteogram() {
-  const result = await fetch('https://www.yr.no/sted/Norge/Oslo/Oslo/Oslo/meteogram.png', {cache: 'no-store'});
+  requestCounter++;
+  const result = await fetch('https://www.yr.no/sted/Norge/Oslo/Oslo/Oslo/meteogram.png?v?'+requestCounter, {cache: 'no-store'});
   const blob = await result.blob();
   document.querySelector('#meteogram').src = URL.createObjectURL(blob);
 };
