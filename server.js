@@ -32,7 +32,7 @@ router.post('/awake', async function(ctx){
 });
 
 router.post('/setStatus/:status', async function(ctx){
-  await backend.isAtHome(ctx.params.status === 'home');
+  await backend.setStatus(ctx.params.status);
 });
 
 router.post('/sleep', async function(ctx){

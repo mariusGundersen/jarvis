@@ -35,4 +35,9 @@ module.exports = class Hub{
       this.hub.light(light).off();
     }
   }
+
+  async setStatus(status){
+    const schedules = await this.hub.getSchedules();
+    console.log(schedules);
+  }
 }

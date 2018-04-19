@@ -3,7 +3,10 @@ for(const button of document.querySelectorAll('button[data-id]')){
   button.addEventListener('click', async e => {
     const scene = button.getAttribute('data-id');
     if(cancelSleep) cancelSleep();
-    await setStatus(scene === 'Leave' ? 'outside' : 'home');
+    await setStatus(
+      scene === 'Leave' ? 'outside' :
+      scene === 'Sleep' ? 'sleep' :
+      'home');
     if(scene === 'Sleep' || scene === 'Leave'){
       await setScene('Nightlight');
       await delay(60*1000, token => cancelSleep = token);
