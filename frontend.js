@@ -1,30 +1,35 @@
 
 const scenes = [
   {
-    name: 'Off',
-    background: '#223',
-    color: 'white'
+    name: 'Relax',
+    background: '#e3bc18',
+    color: '#223',
+    icon: 'flaticon-living-room'
   },
   {
     name: 'Sleep',
-    background: 'linear-gradient(to right, #7d7e7d 0%,#222233 0%,#4e2c0b 100%)',
-    color: 'white'
+    background: 'linear-gradient(to bottom, #e3bc18 0%,#4e2c0b 100%)',
+    color: '#223',
+    icon: 'flaticon-bed'
   },
   {
     name: 'Nightlight',
     background: '#4e2c0b',
-    color: 'white'
+    color: '#ccb',
+    icon: 'flaticon-moon'
   },
   {
-    name: 'Relax',
-    background: '#e3bc18',
-    color: 'black'
+    name: 'Leave',
+    background: 'linear-gradient(to bottom, #4e2c0b 0%,#223 100%)',
+    color: '#ccb',
+    icon: 'flaticon-door'
   },
   {
-    name: 'Bright',
-    background: '#ffff00',
-    color: 'black'
-  }
+    name: 'Off',
+    background: '#223',
+    color: 'white',
+    icon: 'flaticon-turned-off'
+  },
 ];
 
 const racks = [
@@ -79,8 +84,8 @@ exports.index = () => template`<!doctype html>
       <div id="scenes">
         ${scenes.map(sceneButton)}
       </div>
+      ${map(racks)}
       <div id="meteogram-wrapper">
-        ${map(racks)}
         <img id="meteogram" src="https://www.yr.no/place/Norway/Oslo/Oslo/Oslo/meteogram.png" />
       </div>
       <script src="/script.js"></script>
@@ -88,7 +93,7 @@ exports.index = () => template`<!doctype html>
   </html>`
 ;
 
-const map = (racks) => template`<svg id="map" width="535" height="535" viewBox="0 0 100 100" preserveAspectRatio="xMidYMin meet">
+const map = (racks) => template`<svg id="map" width="600" height="600" viewBox="0 0 100 100" preserveAspectRatio="xMidYMin meet">
   <rect x="0" y="0" width="100" height="100" fill="lightslategray" />
   <path class="river" d="M 90 0 T 82,5 T 80,15 T 70,25 T 55,40 T 60,60 T 55,75 T 40 100"></path>
   <line x1="30" x2="30" y1="0" y2="100"></line>
@@ -114,7 +119,7 @@ const sceneButton = (scene) => template`
       background: ${scene.background};
       color: ${scene.color}
     ">
-      ${scene.name}
+      <i class="${scene.icon}"></i>
   </button>`
 ;
 

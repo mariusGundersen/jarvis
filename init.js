@@ -2,9 +2,6 @@ const hue = require("node-hue-api");
 const prompt = require('prompt-promise');
 const fs = require('fs');
 
-var displayBridges = function(bridge) {
-console.log("Hue Bridges Found: " + JSON.stringify(bridge));
-};
 (async () => {
   const bridges = await hue.upnpSearch(2000);
   console.log(bridges);

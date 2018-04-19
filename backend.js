@@ -12,11 +12,12 @@ const accelerometer = new Accelerometer(debug);
 const hub = new Hub(config.hue);
 const bikes = new Bikes(config.bikes['api-key']);
 let lastTouchAt = Date.now();
+let isAtHome = true;
 
 exports.start = async function(){
   await accelerometer.start(async () => {
-    if(Date.now() - lastTouchAt > 1000*60){
-      await hub.activateScene('Bright');
+    if(Date.now() - lastTouchAt > 1000*60 && !isAtHome){
+      await hub.activateScene('Relax');
     }
     await delay(1000);
   }).catch(r => console.error(r));
@@ -33,6 +34,10 @@ exports.fallAsleep = async function(){
 
 exports.activateScene = async function(name){
   await hub.activateScene(name);
+}
+
+exports.isAtHome = function(status){
+  isAtHome = status;
 }
 
 exports.listScenes = async function(){

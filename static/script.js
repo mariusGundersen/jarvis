@@ -3,27 +3,21 @@ for(const button of document.querySelectorAll('button[data-id]')){
   button.addEventListener('click', async e => {
     const scene = button.getAttribute('data-id');
     if(cancelSleep) cancelSleep();
-    if(scene === 'Sleep'){
+    await setStatus(scene === 'Leave' ? 'outside' : 'home');
+    if(scene === 'Sleep' || scene === 'Leave'){
       await setScene('Nightlight');
-      let time = 60;
-      button.textContent = time;
-      const sleepIntval = setInterval(async () => {
-        time--;
-        button.textContent = time;
-        if(time === 0){
-          await setScene('Off');
-          cancelSleep();
-        }
-      }, 1000);
-      cancelSleep = () => {
-        button.textContent = 'Sleep';
-        clearInterval(sleepIntval);
-        cancelSleep = null;
-      }
+      await delay(60*1000, token => cancelSleep = token);
+      await setScene('Off');
     }else{
       await setScene(scene);
     }
   });
+}
+
+async function setStatus(status){
+  await fetch(`/setStatus/${status}`, {
+    method: 'POST'
+  })
 }
 
 async function setScene(name){
@@ -101,4 +95,11 @@ function fade(percentage){
 function percentageToHsl(percentage, hue0, hue1) {
   var hue = (percentage * (hue1 - hue0)) + hue0;
   return 'hsl(' + hue + ', 100%, 50%)';
+}
+
+async function delay(ms, setToken = () => {}){
+  return new Promise(res => {
+    const timeout = setTimeout(res, ms);
+    setToken(() => clearTimeout(timeout));
+  });
 }
