@@ -29,45 +29,50 @@ async function setScene(name){
   });
 }
 
-let requestCounter = 0;
-
 async function refreshMeteogram() {
-  requestCounter++;
-  const result = await fetch('https://www.yr.no/sted/Norge/Oslo/Oslo/Oslo/meteogram.png?v?'+requestCounter, {cache: 'no-store'});
-  const blob = await result.blob();
-  document.querySelector('#meteogram').src = URL.createObjectURL(blob);
+  meteogramElm.src = 'weather.png?v='+Date.now();
 };
 
-document.querySelector('#meteogram').addEventListener('click', refreshMeteogram);
-
-refreshMeteogram();
+meteogramElm.addEventListener('click', refreshMeteogram);
 
 let isAsleep = false;
+let clockInerval = setInterval(updateClock, 500);
 
 document.addEventListener('mousedown', e => {
-  if (!document.mozFullScreenElement) {
-    document.documentElement.mozRequestFullScreen();
-  }
-
   if(isAsleep){
     updateBikes();
     refreshMeteogram();
     fetch('/awake', {
       method: 'POST'
     });
+    clockInerval = setInterval(updateClock, 500);
   }
+
   clearTimeout(sleepy);
   isAsleep = false;
   sleepy = setTimeout(fallAsleep, 1000*60);
+
+  if (!document.mozFullScreenElement) {
+    document.documentElement.mozRequestFullScreen();
+  }
 }, false);
 
 let sleepy = setTimeout(fallAsleep, 1000*60);
+
+mapElm.addEventListener('click', updateBikes);
+
+updateBikes();
 
 function fallAsleep(){
   isAsleep = true;
   fetch('/sleep', {
     method: 'POST'
   });
+  clearInterval(clockInerval);
+}
+
+function updateClock(){
+  timeElm.innerHTML = formatDate(new Date());
 }
 
 async function updateBikes(){
@@ -87,10 +92,6 @@ async function updateBikes(){
   }
 }
 
-document.querySelector('#map').addEventListener('click', updateBikes);
-
-updateBikes();
-
 function fade(percentage){
   return percentageToHsl(percentage, 0, 120);
 }
@@ -105,4 +106,13 @@ async function delay(ms, setToken = () => {}){
     const timeout = setTimeout(res, ms);
     setToken(() => clearTimeout(timeout));
   });
+}
+
+function formatDate(date){
+  return `${fix(date.getHours())}:${fix(date.getMinutes())}:${fix(date.getSeconds())}`;
+}
+
+function fix(number){
+  if(number > 9) return number;
+  return '0'+number;
 }

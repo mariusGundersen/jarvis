@@ -19,10 +19,9 @@ body {
 }
 
 #scenes {
-  list-style: none;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
+  flex-direction: column;
+  flex: 0 0 190px;
   border-right: 6px solid black;
 }
 
@@ -30,35 +29,51 @@ body {
   display: block;
   flex: 1 0 auto;
   text-align: center;
-  padding: 25px;
+  padding: 0 25px;
   background: #223;
   border: none;
   color: #777;
-  font-size: 50px;
+  font-size: 70px;
 }
 
 #scenes .scene img{
   width: 50px;
 }
 
-#meteogram-wrapper {
+#wrapper{
+  flex: 1 0 auto;
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  flex-direction: column;
 }
 
-#meteogram {
-  /*width: 489px;*/
-  width: 771px;
-  flex: 0 0 771px;
+#weather {
+  flex: 0 0 276px;
+  display: flex;
+}
+
+#racksAndTime {
+  flex: 0 0 324px;
+  display: flex;
+}
+
+#clock {
+  font-family: monospace;
+  font-size: 80px;
+  background: #222;
+  color: #eee;
+  flex: 1 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-right: 6px solid black;
 }
 
 #map {
-  flex: 1 0 auto;
+  flex: 0 0 auto;
 }
 
 #map line {
-  stroke: black;
+  stroke: #999;
 }
 
 #map line.ring2 {
@@ -67,7 +82,7 @@ body {
 }
 
 #map path.river {
-  stroke: #139;
+  stroke: #36b;
   fill: none;
   stroke-width: 2;
   stroke-linecap: square;

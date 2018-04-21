@@ -3,41 +3,42 @@ const serve = require('koa-static');
 const Router = require('koa-router');
 
 const backend = require('./backend');
-const frontend = require('./frontend');
 
 const router = new Router();
 
-router.get('/', async function(ctx){
-  ctx.type = 'html';
-  ctx.body = frontend.index();
-});
-
-router.get('/scene', async function(ctx){
+router.get('/scene', async ctx => {
   ctx.body = await backend.listScenes();
 });
 
-router.post('/scene/:name', async function(ctx){
+router.post('/scene/:name', async ctx => {
   await backend.activateScene(ctx.params.name);
   ctx.body = {
     success: true
   };
 });
 
-router.get('/bikes', async function(ctx){
+router.get('/bikes', async ctx => {
   ctx.body = await backend.getBikeStatus();
 });
 
-router.post('/awake', async function(ctx){
+router.get('/weather.png', async ctx => {
+  ctx.body = await backend.getWeather();
+});
+
+router.post('/awake', async ctx => {
   await backend.wakeUp();
+  ctx.status = 200;
 });
 
-router.post('/setStatus/:status', async function(ctx){
+router.post('/setStatus/:status', async ctx => {
   await backend.setStatus(ctx.params.status);
+  ctx.status = 200;
 });
 
-router.post('/sleep', async function(ctx){
+router.post('/sleep', async ctx => {
   await backend.fallAsleep();
-});
+  ctx.status = 200;
+})
 
 backend.start().then(function(){
   const app = new Koa();

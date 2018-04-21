@@ -75,26 +75,8 @@ const racks = [
   }
 ];
 
-exports.index = () => template`<!doctype html>
-  <html>
-    <head>
-      <link rel="stylesheet" href="/style.css" />
-    </head>
-    <body>
-      <div id="scenes">
-        ${scenes.map(sceneButton)}
-      </div>
-      ${map(racks)}
-      <div id="meteogram-wrapper">
-        <img id="meteogram" src="https://www.yr.no/place/Norway/Oslo/Oslo/Oslo/meteogram.png" />
-      </div>
-      <script src="/script.js"></script>
-    </body>
-  </html>`
-;
-
-const map = (racks) => template`<svg id="map" width="600" height="600" viewBox="0 0 100 100" preserveAspectRatio="xMidYMin meet">
-  <rect x="0" y="0" width="100" height="100" fill="lightslategray" />
+const bikeMap = (racks) => template`
+  <rect x="0" y="0" width="100" height="100" fill="#222" />
   <path class="river" d="M 90 0 T 82,5 T 80,15 T 70,25 T 55,40 T 60,60 T 55,75 T 40 100"></path>
   <line x1="30" x2="30" y1="0" y2="100"></line>
   <line x1="99" x2="60" y1="0" y2="100"></line>
@@ -105,24 +87,33 @@ const map = (racks) => template`<svg id="map" width="600" height="600" viewBox="
     <path class="home" d="m25,1 6,17h18l-14,11 5,17-15-10-15,10 5-17-14-11h18z" style="transform: scale(0.1)" />
   </g>
   ${racks.map(bikeStop)}
-</svg>`;
+`;
 
 const bikeStop = (rack) => template`
 <circle cx="${rack.x}" cy="${rack.y}" r="2" class="bike-circle" data-id="${rack.id}" />`;
 //<text x="${rack.x}" y="${rack.y}" text-anchor="middle" alignment-baseline="middle" class="bike-text" data-id="${rack.id}">?</text>`;
 
 const sceneButton = (scene) => template`
-  <button
-    class="scene"
-    data-id="${scene.name}"
-    style="
-      background: ${scene.background};
-      color: ${scene.color}
-    ">
-      <i class="${scene.icon}"></i>
-  </button>`
+<button
+  class="scene"
+  data-id="${scene.name}"
+  style="
+    background: ${scene.background};
+    color: ${scene.color}
+  ">
+    <i class="${scene.icon}"></i>
+</button>`
 ;
 
 function template(strings, ...objects){
   return String.raw(strings, ...objects.map(o => Array.isArray(o) ? o.join('') : o))
 }
+
+
+const scenesElm = document.querySelector('#scenes');
+const mapElm = document.querySelector('#map');
+const timeElm = document.querySelector('#time');
+const meteogramElm = document.querySelector('#meteogram');
+
+scenesElm.innerHTML = scenes.map(sceneButton).join('');
+mapElm.innerHTML = bikeMap(racks);

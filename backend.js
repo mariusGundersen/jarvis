@@ -1,6 +1,7 @@
 const config = require('./config.json');
 const Hub = require('./Hub.js');
 const Bikes = require('./Bikes.js');
+const Weather = require('./Weather.js');
 
 const Screen = require('./Screen.js');
 const Accelerometer = require('./Accelerometer.js');
@@ -11,6 +12,8 @@ const screen = new Screen(debug);
 const accelerometer = new Accelerometer(debug);
 const hub = new Hub(config.hue);
 const bikes = new Bikes(config.bikes['api-key']);
+const weather = new Weather();
+
 let lastTouchAt = Date.now();
 let isOutside = false;
 
@@ -48,6 +51,10 @@ exports.listScenes = async function(){
 
 exports.getBikeStatus = async function(){
   return await bikes.getStatus();
+}
+
+exports.getWeather = async function(){
+  return await weather.getMeteogram();
 }
 
 function delay(ms){
