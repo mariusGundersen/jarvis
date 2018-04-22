@@ -36,8 +36,15 @@ module.exports = class Hub{
     }
   }
 
-  async setStatus(status){
+  async setStatus(state){
+    const weekdayBeedroom = 1;
+    const weekendBedroom = 3;
+    const weekdayHallway = 8;
+    const status = state === 'sleep' ? 'enabled' : 'disabled';
     const schedules = await this.hub.getSchedules();
-    console.log(schedules);
+    await this.hub.updateSchedule(weekdayBeedroom, {status});
+    await this.hub.updateSchedule(weekendBedroom, {status});
+    await this.hub.updateSchedule(weekdayHallway, {status});
+    console.log(schedules.map(s => `${s.id}: ${s.name} - ${s.status}`));
   }
 }

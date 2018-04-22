@@ -27,13 +27,17 @@ exports.start = async function(){
   }).catch(r => console.error(r));
 }
 
-exports.wakeUp = async function(){
-  await screen.wakeUp();
-  lastTouchAt = Date.now();
+exports.getScreen = async function(){
+  return await screen.get();
 }
 
-exports.fallAsleep = async function(){
-  await screen.fallAsleep();
+exports.setScreen = async function(on){
+  if(on){
+    await screen.on();
+    lastTouchAt = Date.now();
+  }else{
+    await screen.off();
+  }
 }
 
 exports.activateScene = async function(name){

@@ -2,20 +2,39 @@ const GpioPin = require('./Gpio');
 
 module.exports = class Screen{
   constructor({dummy = false} = {dummy: false}){
-    if(dummy) return;
+    if(dummy) {
+      this.dummmyValue = true;
+      return;
+    }
     this.bgLed = new GpioPin(362, 'out');
   }
 
-  async wakeUp(){
-    console.log('wake up');
-    if(!this.bgLed) return;
+  async get(){
+    if(!this.bgLed) {
+      return this.dummmyValue;
+    }
+
+    return this.bgLed.direction() == 'out';
+  }
+
+  async on(){
+    console.log('turn on screen');
+    if(!this.bgLed) {
+      this.dummmyValue = true;
+      return;
+    }
+
     await this.bgLed.out().catch(logError);
     await this.bgLed.low().catch(logError);
   }
 
-  async fallAsleep(){
-    console.log('fall asleep');
-    if(!this.bgLed) return;
+  async off(){
+    console.log('turn off screen');
+    if(!this.bgLed) {
+      this.dummmyValue = false;
+      return;
+    }
+
     await this.bgLed.in().catch(logError);
   }
 };

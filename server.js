@@ -25,19 +25,18 @@ router.get('/weather.png', async ctx => {
   ctx.body = await backend.getWeather();
 });
 
-router.post('/awake', async ctx => {
-  await backend.wakeUp();
-  ctx.status = 200;
-});
-
 router.post('/setStatus/:status', async ctx => {
   await backend.setStatus(ctx.params.status);
   ctx.status = 200;
 });
 
-router.post('/sleep', async ctx => {
-  await backend.fallAsleep();
+router.post('/screen/:status', async ctx => {
+  await backend.setScreen(ctx.params.status === 'on');
   ctx.status = 200;
+});
+
+router.get('/screen', async ctx => {
+  ctx.body = await backend.getScreen();
 })
 
 backend.start().then(function(){

@@ -18,15 +18,11 @@ for(const button of document.querySelectorAll('button[data-id]')){
 }
 
 async function setStatus(status){
-  await fetch(`/setStatus/${status}`, {
-    method: 'POST'
-  })
+  await post(`/setStatus/${status}`);
 }
 
 async function setScene(name){
-  await fetch(`/scene/${name}`, {
-    method: 'POST'
-  });
+  await post(`/scene/${name}`);
 }
 
 async function refreshMeteogram() {
@@ -35,39 +31,32 @@ async function refreshMeteogram() {
 
 meteogramElm.addEventListener('click', refreshMeteogram);
 
-let isAsleep = false;
 let clockInerval = setInterval(updateClock, 500);
 
-document.addEventListener('mousedown', e => {
-  if(isAsleep){
-    updateBikes();
+document.addEventListener('mousedown', async e => {
+  if(await getJson('/screen') === false){
+    await post('/screen/on');
+    await updateBikes();
     refreshMeteogram();
-    fetch('/awake', {
-      method: 'POST'
-    });
     clockInerval = setInterval(updateClock, 500);
   }
 
-  clearTimeout(sleepy);
-  isAsleep = false;
-  sleepy = setTimeout(fallAsleep, 1000*60);
+  clearTimeout(screenOffTimeout);
+  screenOffTimeout = setTimeout(screenOff, 1000*60);
 
   if (!document.mozFullScreenElement) {
     document.documentElement.mozRequestFullScreen();
   }
 }, false);
 
-let sleepy = setTimeout(fallAsleep, 1000*60);
+let screenOffTimeout = setTimeout(screenOff, 1000*60);
 
 mapElm.addEventListener('click', updateBikes);
 
 updateBikes();
 
-function fallAsleep(){
-  isAsleep = true;
-  fetch('/sleep', {
-    method: 'POST'
-  });
+async function screenOff(){
+  await post('/screen/off');
   clearInterval(clockInerval);
 }
 
@@ -76,9 +65,8 @@ function updateClock(){
 }
 
 async function updateBikes(){
-  const result = await fetch('/bikes');
-  const racks = await result.json();
-  const map = new Map(racks.map(r => [r.id.toString(), r.availability]));
+  const result = await getJson('/bikes');
+  const map = new Map(result.map(r => [r.id.toString(), r.availability]));
   for(const rack of document.querySelectorAll('.bike-text')){
     const availability = map.get(rack.getAttribute('data-id'));
     rack.textContent = availability.bikes;
@@ -90,6 +78,16 @@ async function updateBikes(){
       : 0.9 + 0.1*(1 - 1/(availability.bikes - 6));
     rack.style.fill = fade(percentage);
   }
+}
+
+function post(path){
+  return fetch(path, {
+    method: 'POST'
+  });
+}
+
+function getJson(path){
+  return fetch(path).then(r => r.json());
 }
 
 function fade(percentage){
