@@ -103,9 +103,9 @@ const sceneButton = (scene) => template`
   ">
     <i class="${scene.icon}"></i>
 </button>`
-;
+  ;
 
-function template(strings, ...objects){
+function template(strings, ...objects) {
   return String.raw(strings, ...objects.map(o => Array.isArray(o) ? o.join('') : o))
 }
 
@@ -117,3 +117,5 @@ const meteogramElm = document.querySelector('#meteogram');
 
 scenesElm.innerHTML = scenes.map(sceneButton).join('');
 mapElm.innerHTML = bikeMap(racks);
+
+window.onerror = () => document.location.reload();

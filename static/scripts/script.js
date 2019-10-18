@@ -1,96 +1,97 @@
 let cancelSleep = null;
-for(const button of document.querySelectorAll('button[data-id]')){
+for (const button of document.querySelectorAll('button[data-id]')) {
   button.addEventListener('click', async e => {
     const scene = button.getAttribute('data-id');
-    if(cancelSleep) cancelSleep();
+    if (cancelSleep) cancelSleep();
     await setStatus(
       scene === 'Leave' ? 'outside' :
-      scene === 'Sleep' ? 'sleep' :
-      'home');
-    if(scene === 'Sleep' || scene === 'Leave'){
+        scene === 'Sleep' ? 'sleep' :
+          'home');
+    if (scene === 'Sleep' || scene === 'Leave') {
       await setScene('Nightlight');
-      await delay(60*1000, token => cancelSleep = token);
+      await delay(60 * 1000, token => cancelSleep = token);
       await setScene('Off');
-    }else{
+    } else {
       await setScene(scene);
     }
   });
 }
 
-async function setStatus(status){
+async function setStatus(status) {
   await post(`/setStatus/${status}`);
 }
 
-async function setScene(name){
+async function setScene(name) {
   await post(`/scene/${name}`);
 }
 
 async function refreshMeteogram() {
-  meteogramElm.src = 'weather.png?v='+Date.now();
+  meteogramElm.src = 'weather.png?v=' + Date.now();
 };
 
 meteogramElm.addEventListener('click', refreshMeteogram);
 
-let clockInerval = setInterval(updateClock, 500);
+let clockInterval = setInterval(updateClock, 500);
 
 document.addEventListener('mousedown', async e => {
-  if(await getJson('/screen') === false){
+  if (await getJson('/screen') === false) {
     await post('/screen/on');
     await updateBikes();
     refreshMeteogram();
-    clockInerval = setInterval(updateClock, 500);
+    updateClock();
+    clockInterval = setInterval(updateClock, 500);
   }
 
   clearTimeout(screenOffTimeout);
-  screenOffTimeout = setTimeout(screenOff, 1000*60);
+  screenOffTimeout = setTimeout(screenOff, 1000 * 60);
 
   if (!document.mozFullScreenElement) {
     document.documentElement.mozRequestFullScreen();
   }
 }, false);
 
-let screenOffTimeout = setTimeout(screenOff, 1000*60);
+let screenOffTimeout = setTimeout(screenOff, 1000 * 60);
 
 mapElm.addEventListener('click', updateBikes);
 
 updateBikes();
 
-async function screenOff(){
+async function screenOff() {
   await post('/screen/off');
-  clearInterval(clockInerval);
+  clearInterval(clockInterval);
 }
 
-function updateClock(){
+function updateClock() {
   timeElm.innerHTML = formatDate(new Date());
 }
 
-async function updateBikes(){
+async function updateBikes() {
   const result = await getJson('/bikes');
-  const map = new Map(result.map(r => [r.id.toString(), r.availability]));
-  for(const rack of document.querySelectorAll('.bike-text')){
+  const map = new Map(result.map(r => [r.station_id, r]));
+  for (const rack of document.querySelectorAll('.bike-text')) {
     const availability = map.get(rack.getAttribute('data-id'));
-    rack.textContent = availability.bikes;
+    rack.textContent = availability.num_bikes_available;
   }
-  for(const rack of document.querySelectorAll('.bike-circle')){
+  for (const rack of document.querySelectorAll('.bike-circle')) {
     const availability = map.get(rack.getAttribute('data-id'));
-    const percentage = availability.bikes < 7
-      ? availability.bikes/7*0.9
-      : 0.9 + 0.1*(1 - 1/(availability.bikes - 6));
+    const percentage = availability.num_bikes_available < 7
+      ? availability.num_bikes_available / 7 * 0.9
+      : 0.9 + 0.1 * (1 - 1 / (availability.num_bikes_available - 6));
     rack.style.fill = fade(percentage);
   }
 }
 
-function post(path){
+function post(path) {
   return fetch(path, {
     method: 'POST'
   });
 }
 
-function getJson(path){
+function getJson(path) {
   return fetch(path).then(r => r.json());
 }
 
-function fade(percentage){
+function fade(percentage) {
   return percentageToHsl(percentage, 0, 120);
 }
 
@@ -99,18 +100,18 @@ function percentageToHsl(percentage, hue0, hue1) {
   return 'hsl(' + hue + ', 100%, 50%)';
 }
 
-async function delay(ms, setToken = () => {}){
+async function delay(ms, setToken = () => { }) {
   return new Promise(res => {
     const timeout = setTimeout(res, ms);
     setToken(() => clearTimeout(timeout));
   });
 }
 
-function formatDate(date){
+function formatDate(date) {
   return `${fix(date.getHours())}:${fix(date.getMinutes())}:${fix(date.getSeconds())}`;
 }
 
-function fix(number){
-  if(number > 9) return number;
-  return '0'+number;
+function fix(number) {
+  if (number > 9) return number;
+  return '0' + number;
 }
