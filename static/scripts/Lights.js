@@ -1,17 +1,34 @@
-import { template } from './util.js';
+import { template, post, Delayer } from './util.js';
 
 export default class Lights {
   constructor(element) {
     this.element = element;
     this.element.innerHTML = scenes.map(sceneButton).join('');
+    this.delayer = new Delayer(60 * 1000);
   }
 
-  setScene(scene) {
-    this.scene = scene;
+  setState(state) {
+    this.state = state;
     for (const button of document.querySelectorAll('button[data-id]')) {
       const name = button.getAttribute('data-id');
-      button.setAttribute('data-active', scene == name);
+      button.setAttribute('data-active', state == name);
     }
+  }
+
+  async delay() {
+    await this.delayer.delay();
+  }
+
+  async clearDelay() {
+    this.delayer.clearDelay();
+  }
+
+  async setStatus(status) {
+    await post(`/setStatus/${status}`);
+  }
+
+  async setScene(name) {
+    await post(`/scene/${name}`);
   }
 }
 

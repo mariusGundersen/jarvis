@@ -2,7 +2,7 @@ import Clock from './Clock.js';
 import Weather from './Weather.js';
 import BikeMap from './BikeMap.js';
 import Lights from './Lights.js';
-import { delay, post, getJson } from './util.js';
+import Screen from './Screen.js';
 
 // window.onerror = () => document.location.reload();
 
@@ -10,65 +10,45 @@ const clock = new Clock(document.querySelector('#clock'));
 const weather = new Weather(document.querySelector('#meteogram'));
 const bikeMap = new BikeMap(document.querySelector('#map'));
 const lights = new Lights(document.querySelector('#scenes'));
+const screen = new Screen();
 
 for (const button of document.querySelectorAll('button[data-id]')) {
   button.addEventListener('click', async e => {
-    const scene = button.getAttribute('data-id');
-    lights.setScene(scene);
-    switch (scene) {
+    const name = button.getAttribute('data-id');
+    lights.setState(name);
+    lights.clearDelay();
+    switch (name) {
       case 'Leave':
         clock.setMessage('Ha det bra &#x1F44B;');
-        await fadeOff();
-        if (lights.scene !== scene) return;
-        await setStatus('outside');
+        await lights.setScene('Nightlight');
+        await lights.delay();
+        await lights.setScene('Off');
+        await lights.setStatus('outside');
         clock.setMessage('&nbsp;');
       case 'Sleep':
         clock.setMessage('Sov godt &#x1F634;')
-        await fadeOff();
-        if (lights.scene !== scene) return;
-        await setStatus('sleep');
+        await lights.setScene('Nightlight');
+        await lights.delay();
+        await lights.setScene('Off');
+        await lights.setStatus('sleep');
         clock.setMessage('&nbsp;');
       default:
         clock.setMessage('&nbsp;');
-        await setScene(scene);
-        await setStatus('home');
+        await lights.setScene(name);
+        await lights.setStatus('home');
     }
   });
 }
 
-async function fadeOff() {
-  await setScene('Nightlight');
-  await delay(60 * 1000);
-  await setScene('Off');
-}
-
-async function setStatus(status) {
-  await post(`/setStatus/${status}`);
-}
-
-async function setScene(name) {
-  await post(`/scene/${name}`);
-}
-
 document.addEventListener('mousedown', async e => {
   clock.enable();
-  if (await getJson('/screen') === false) {
-    await post('/screen/on');
+  if (await screen.isOff()) {
+    await screen.turnOn();
     await bikeMap.update();
     weather.refresh();
   }
 
-  clearTimeout(screenOffTimeout);
-  screenOffTimeout = setTimeout(screenOff, 1000 * 60);
-
-  if (!document.mozFullScreenElement) {
-    document.documentElement.mozRequestFullScreen();
-  }
-}, false);
-
-let screenOffTimeout = setTimeout(screenOff, 1000 * 60);
-
-async function screenOff() {
-  await post('/screen/off');
+  await screen.delay();
+  await screen.turnOff();
   clock.disable();
-}
+}, false);

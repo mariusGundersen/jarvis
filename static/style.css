@@ -18,6 +18,10 @@ body {
   background: black;
 }
 
+button {
+  outline:none;
+}
+
 #scenes {
   display: flex;
   flex-direction: column;

@@ -18,3 +18,20 @@ export async function delay(ms, setToken = () => { }) {
     setToken(() => clearTimeout(timeout));
   });
 }
+
+export class Delayer {
+  constructor(ms) {
+    this.ms = ms;
+  }
+
+  clearDelay() {
+    clearTimeout(this.timeout);
+  }
+
+  delay() {
+    clearTimeout(this.timeout);
+    return new Promise(res => {
+      this.timeout = setTimeout(res, this.ms);
+    });
+  }
+}
