@@ -18,8 +18,10 @@ body {
   background: black;
 }
 
-button {
-  outline:none;
+*,
+*:focus,
+*.active {
+  outline: none;
 }
 
 #scenes {
