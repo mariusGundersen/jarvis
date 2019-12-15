@@ -100,7 +100,7 @@ async function initialize() {
   await write_register(FF_MT_THS, DBCNTM | 1);
 
   // debounce time (0x80*1.25ms=160ms)
-  await write_register(FF_MT_COUNT, 0x80);
+  await write_register(FF_MT_COUNT, 0x40);
 
   // WAKE_FF_MT: wake up on motion
   // IPOL: interrupt is active high (rising edge)
