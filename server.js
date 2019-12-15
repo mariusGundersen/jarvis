@@ -3,8 +3,12 @@ const serve = require('koa-static');
 const Router = require('koa-router');
 
 const backend = require('./backend');
+const Bikes = require('./Bikes.js');
+const Weather = require('./Weather.js');
 
 const router = new Router();
+const bikes = new Bikes();
+const weather = new Weather();
 
 router.get('/scene', async ctx => {
   ctx.body = await backend.listScenes();
@@ -18,11 +22,11 @@ router.post('/scene/:name', async ctx => {
 });
 
 router.get('/bikes', async ctx => {
-  ctx.body = await backend.getBikeStatus();
+  ctx.body = await bikes.getStatus();
 });
 
 router.get('/weather.png', async ctx => {
-  ctx.body = await backend.getWeather();
+  ctx.body = weather.getMeteogram();
 });
 
 router.post('/setStatus/:status', async ctx => {
@@ -39,7 +43,7 @@ router.get('/screen', async ctx => {
   ctx.body = await backend.getScreen();
 })
 
-backend.start().then(function(){
+backend.start().then(function () {
   const app = new Koa();
   app.use(serve('./static'));
   app.use(router.routes());

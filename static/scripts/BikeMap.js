@@ -17,13 +17,13 @@ export default class BikeMap {
     }
     for (const rack of this.element.querySelectorAll('.bike-circle')) {
       const availability = map.get(rack.getAttribute('data-id'));
-      const percentage = calculatePercentage(availability);
+      const percentage = calculatePercentage(availability.num_bikes_available);
       rack.style.fill = fade(percentage);
     }
   }
 }
 
-function calculatePercentage({ num_bikes_available }) {
+function calculatePercentage(num_bikes_available) {
   if (num_bikes_available < 7) {
     return num_bikes_available / 7 * 0.9;
   }
@@ -44,42 +44,74 @@ const racks = [
   {
     x: 27,
     y: 34,
-    id: 162
+    id: "383",
+    name: "Arkitekt Rivertz Plass"
   },
   {
     x: 40,
     y: 8,
-    id: 183
+    id: "407",
+    name: "Sagene bussholdeplass"
   },
   {
     x: 39,
     y: 89,
-    id: 233
+    id: "421",
+    name: "Alexander Kiellands Plass"
+  },
+  {
+    x: 27,
+    y: 79,
+    id: "399",
+    name: "Uelands gate"
+  },
+  {
+    x: 33,
+    y: 83,
+    id: "410",
+    name: "Landstads gate"
+  },
+  {
+    x: 62,
+    y: 52,
+    id: "607",
+    name: "Marcus Thranes gate"
   },
   {
     x: 79,
     y: 59,
-    id: 251
+    id: "744",
+    name: "Hallénparken"
   },
   {
     x: 62,
     y: 83,
-    id: 196
+    id: "398",
+    name: "Ringnes Park"
+  },
+  {
+    x: 53,
+    y: 83,
+    id: "439",
+    name: "Mølleparken"
   },
   {
     x: 27,
     y: 56,
-    id: 248
+    id: "433",
+    name: "Ila"
   },
   {
     x: 40,
     y: 46,
-    id: 400
+    id: "555",
+    name: "Griffenfeldts gate"
   },
   {
     x: 42,
     y: 39,
-    id: 418
+    id: "606",
+    name: "Stockfleths gate"
   }
 ];
 

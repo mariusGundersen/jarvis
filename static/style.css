@@ -92,7 +92,7 @@ body {
 }
 
 #map line {
-  stroke: #999;
+  stroke: #ccc;
 }
 
 #map line.ring2 {
@@ -101,14 +101,16 @@ body {
 }
 
 #map path.river {
-  stroke: #36b;
+  stroke: rgb(103, 150, 231);
   fill: none;
   stroke-width: 2;
   stroke-linecap: square;
 }
 
 #map path.home {
-  fill: gold;
+  fill: rgb(255, 240, 158);
+  stroke: orange;
+  stroke-width: 2;
 }
 
 #map circle.bike-circle {
