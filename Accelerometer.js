@@ -7,7 +7,7 @@ module.exports = class Accelerometer{
     this.interruptPin = new GpioPin(233, 'in', 'rising'); //pin 13
   }
 
-  async start(onMotion){
+  async start({onMotion}){
     if(!this.interruptPin) return;
     await i2c.initialize();
     console.log('setup interrupt');

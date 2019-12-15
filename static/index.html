@@ -1,23 +1,26 @@
 <!doctype html>
 <html>
-  <head>
-    <link rel="stylesheet" href="/style.css" />
-  </head>
-  <body>
-    <div id="scenes">
-    </div>
-    <div id="wrapper">
-      <div id="racksAndTime">
-        <div id="clock">
-          <span id="time"></span>
-        </div>
-        <svg id="map" width="324" height="324" viewBox="0 0 100 100" preserveAspectRatio="xMidYMin meet"></svg>
+
+<head>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+
+<body>
+  <div id="scenes">
+  </div>
+  <div id="wrapper">
+    <div id="racksAndTime">
+      <div id="clock">
+        <div class="time"></div>
+        <div class="message">&nbsp;</div>
       </div>
-      <div id="weather">
-        <img id="meteogram" src="/weather.png" />
-      </div>
+      <svg id="map" width="324" height="324" viewBox="0 0 100 100" preserveAspectRatio="xMidYMin meet"></svg>
     </div>
-    <script src="/scripts/main.js"></script>
-    <script src="/scripts/script.js"></script>
-  </body>
+    <div id="weather">
+      <img id="meteogram" src="/weather.png" />
+    </div>
+  </div>
+  <script src="/scripts/script.js" type="module"></script>
+</body>
+
 </html>

@@ -1,11 +1,11 @@
 const HueApi = require('node-hue-api').HueApi;
 
-module.exports = class Hub{
-  constructor(config){
+module.exports = class Hub {
+  constructor(config) {
     this.hub = new HueApi(config.bridge, config.username);
   }
 
-  async listScenes(){
+  async listScenes() {
     const scenes = await this.hub.scenes();
     return scenes
       .sort((a, b) => a.name > b.name ? 1 : a.name < b.name ? -1 : 0)
@@ -13,38 +13,38 @@ module.exports = class Hub{
       .filter((e, i, c) => c.indexOf(e) === i);
   }
 
-  async activateScene(name){
+  async activateScene(name) {
     const scenes = await this.hub.scenes();
-    for(const scene of scenes.filter(scene => scene.name == name)){
+    for (const scene of scenes.filter(scene => scene.name == name)) {
       await this.hub.activateScene(scene.id);
     }
   }
 
-  async allOn(){
+  async allOn() {
     const lights = await this.hub.getLights();
     console.log(lights);
-    for(const light in lights){
+    for (const light in lights) {
       this.hub.light(light).on();
     }
   }
 
-  async allOff(){
+  async allOff() {
     const lights = await this.hub.getLights();
     console.log(lights);
-    for(const light in lights){
+    for (const light in lights) {
       this.hub.light(light).off();
     }
   }
 
-  async setStatus(state){
+  async wakeUpInMorning(sleep) {
     const weekdayBeedroom = 1;
     const weekendBedroom = 3;
     const weekdayHallway = 8;
-    const status = state === 'sleep' ? 'enabled' : 'disabled';
     const schedules = await this.hub.getSchedules();
-    await this.hub.updateSchedule(weekdayBeedroom, {status});
-    await this.hub.updateSchedule(weekendBedroom, {status});
-    await this.hub.updateSchedule(weekdayHallway, {status});
+    const status = sleep ? 'enabled' : 'disabled';
+    await this.hub.updateSchedule(weekdayBeedroom, { status });
+    await this.hub.updateSchedule(weekendBedroom, { status });
+    await this.hub.updateSchedule(weekdayHallway, { status });
     console.log(schedules.map(s => `${s.id}: ${s.name} - ${s.status}`));
   }
 }

@@ -15,7 +15,7 @@ body {
   display: flex;
   justify-content: space-between;
   flex-direction: row;
-  background: white;
+  background: black;
 }
 
 #scenes {
@@ -29,11 +29,16 @@ body {
   display: block;
   flex: 1 0 auto;
   text-align: center;
-  padding: 0 25px;
-  background: #223;
+  padding: 0 25px 0 1px;
+  background: black;
   border: none;
+  border-left: 10px solid black;
   color: #777;
   font-size: 70px;
+}
+
+#scenes .scene[data-active=true]{
+  border-left: 10px solid white;
 }
 
 #scenes .scene img{
@@ -57,15 +62,23 @@ body {
 }
 
 #clock {
-  font-family: monospace;
-  font-size: 80px;
-  background: #222;
   color: #eee;
   flex: 1 0 auto;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   border-right: 6px solid black;
+}
+
+#clock .time {
+  font-size: 80px;
+  font-family: monospace;
+}
+
+#clock .message{
+  font-size: 40px;
+  font-family: sans-serif;
 }
 
 #map {
