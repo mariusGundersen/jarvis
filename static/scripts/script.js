@@ -19,23 +19,11 @@ for (const button of document.querySelectorAll('button[data-id]')) {
     lights.clearDelay();
     switch (name) {
       case 'Leave':
-        clock.setMessage('Ha det bra &#x1F44B;');
-        await lights.setScene('Nightlight');
-        await lights.delay();
-        await lights.setScene('Off');
-        await lights.setStatus('outside');
-        clock.setMessage('&nbsp;');
+        return await leaveHome();
       case 'Sleep':
-        clock.setMessage('Sov godt &#x1F634;')
-        await lights.setScene('Nightlight');
-        await lights.delay();
-        await lights.setScene('Off');
-        await lights.setStatus('sleep');
-        clock.setMessage('&nbsp;');
+        return await goToBed();
       default:
-        clock.setMessage('&nbsp;');
-        await lights.setScene(name);
-        await lights.setStatus('home');
+        return await setLights(name);
     }
   });
 }
@@ -52,3 +40,28 @@ document.addEventListener('mousedown', async e => {
   await screen.turnOff();
   clock.disable();
 }, false);
+
+async function goToBed() {
+  clock.setMessage('Sov godt &#x1F634;');
+  await lights.setScene('Nightlight');
+  await lights.delay();
+  await lights.setScene('Off');
+  await lights.setStatus('sleep');
+  clock.setMessage('&nbsp;');
+}
+
+async function leaveHome() {
+  clock.setMessage('Ha det bra &#x1F44B;');
+  await lights.setScene('Nightlight');
+  await lights.delay();
+  await lights.setScene('Off');
+  await lights.setStatus('outside');
+  clock.setMessage('&nbsp;');
+}
+
+async function setLights(name) {
+  clock.setMessage('&nbsp;');
+  await lights.setScene(name);
+  await lights.setStatus('home');
+}
+
