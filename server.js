@@ -29,6 +29,10 @@ router.get('/weather.png', async ctx => {
   ctx.body = weather.getMeteogram();
 });
 
+router.get('/weather', async ctx => {
+  ctx.body = weather.getXml();
+});
+
 router.post('/setStatus/:status', async ctx => {
   await backend.setStatus(ctx.params.status);
   ctx.status = 200;
@@ -41,12 +45,14 @@ router.post('/screen/:status', async ctx => {
 
 router.get('/screen', async ctx => {
   ctx.body = await backend.getScreen();
-})
+});
 
-backend.start().then(function () {
+function run() {
   const app = new Koa();
   app.use(serve('./static'));
   app.use(router.routes());
   app.listen(3000);
   console.log('listening on port 3000');
-}).catch(e => console.error(e));
+}
+
+backend.start().then(run).catch(e => console.error(e));

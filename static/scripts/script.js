@@ -1,16 +1,18 @@
 import Clock from './Clock.js';
-import Weather from './Weather.js';
 import BikeMap from './BikeMap.js';
 import Lights from './Lights.js';
 import Screen from './Screen.js';
+import Meteogram from './Meteogram.js';
 
 // window.onerror = () => document.location.reload();
 
 const clock = new Clock(document.querySelector('#clock'));
-const weather = new Weather(document.querySelector('#meteogram'));
 const bikeMap = new BikeMap(document.querySelector('#map'));
 const lights = new Lights(document.querySelector('#scenes'));
 const screen = new Screen();
+const meteogram = new Meteogram(document.querySelector('.container'));
+
+meteogram.load();
 
 for (const button of document.querySelectorAll('button[data-id]')) {
   button.addEventListener('click', async e => {
@@ -33,7 +35,7 @@ document.addEventListener('mousedown', async e => {
   if (await screen.isOff()) {
     await screen.turnOn();
     await bikeMap.update();
-    weather.refresh();
+    meteogram.load();
   }
 
   await screen.delay();
