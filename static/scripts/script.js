@@ -10,7 +10,7 @@ const clock = new Clock(document.querySelector('#clock'));
 const bikeMap = new BikeMap(document.querySelector('#map'));
 const lights = new Lights(document.querySelector('#scenes'));
 const screen = new Screen();
-const meteogram = new Meteogram(document.querySelector('.container'));
+const meteogram = new Meteogram(document.querySelector('#weather'));
 
 meteogram.load();
 

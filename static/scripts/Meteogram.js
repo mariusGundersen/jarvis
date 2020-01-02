@@ -123,7 +123,7 @@ export default class Meteogram {
         'L', x, chart.plotTop + chart.plotHeight + 32, 'Z'])
         .attr({
           stroke: chart.options.chart.plotBorderColor,
-          'stroke-width': 1
+          'stroke-width': 2
         })
         .add();
     }
@@ -153,8 +153,8 @@ export default class Meteogram {
         marginBottom: 70,
         marginRight: 40,
         marginTop: 50,
-        plotBorderWidth: 1,
-        height: 310,
+        plotBorderWidth: 2,
+        height: 276,
         alignTicks: false,
         scrollablePlotArea: {
           minWidth: 720
@@ -187,14 +187,6 @@ export default class Meteogram {
         }
       },
 
-      credits: {
-        text: 'Forecast from <a href="http://yr.no">yr.no</a>',
-        href: xml.querySelector('credit link').getAttribute('url'),
-        position: {
-          x: -40
-        }
-      },
-
       tooltip: {
         shared: true,
         useHTML: true,
@@ -209,7 +201,7 @@ export default class Meteogram {
         tickInterval: 2 * 36e5, // two hours
         minorTickInterval: 36e5, // one hour
         tickLength: 0,
-        gridLineWidth: 1,
+        gridLineWidth: 2,
         gridLineColor: 'rgba(128, 128, 128, 0.1)',
         startOnTick: false,
         endOnTick: false,
@@ -233,7 +225,7 @@ export default class Meteogram {
         },
         opposite: true,
         tickLength: 20,
-        gridLineWidth: 1
+        gridLineWidth: 2
       }],
 
       yAxis: [{ // temperature axis
@@ -243,9 +235,9 @@ export default class Meteogram {
         labels: {
           format: '{value}°',
           style: {
-            fontSize: '10px'
+            fontSize: '12px'
           },
-          x: -3
+          x: -5
         },
         plotLines: [{ // zero plane
           value: 0,
@@ -256,7 +248,9 @@ export default class Meteogram {
         maxPadding: 0.3,
         minRange: 8,
         tickInterval: 1,
-        gridLineColor: 'rgba(128, 128, 128, 0.1)'
+        gridLineWidth: 1,
+        tickLength: 0,
+        gridLineColor: 'rgba(128, 128, 128, 0.3)'
 
       }, { // precipitation axis
         title: {
@@ -278,21 +272,22 @@ export default class Meteogram {
           align: 'high',
           rotation: 0,
           style: {
-            fontSize: '10px',
+            fontSize: '12px',
             color: Highcharts.getOptions().colors[2]
           },
           textAlign: 'left',
-          x: 3
+          x: 5
         },
         labels: {
           style: {
-            fontSize: '8px',
+            fontSize: '12px',
             color: Highcharts.getOptions().colors[2]
           },
-          y: 2,
-          x: 3
+          y: 4,
+          x: 5
         },
         gridLineWidth: 0,
+        tickLength: 0,
         opposite: true,
         showLastLabel: false
       }],

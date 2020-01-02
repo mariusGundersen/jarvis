@@ -49,7 +49,7 @@ router.get('/screen', async ctx => {
 
 function run() {
   const app = new Koa();
-  app.use(serve('./static'));
+  app.use(serve('./static', { maxage: 0 }));
   app.use(router.routes());
   app.listen(3000);
   console.log('listening on port 3000');
