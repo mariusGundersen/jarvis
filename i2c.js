@@ -18,17 +18,17 @@ const FF_MT_COUNT = 0x18;
 const CTRL_REG3 = 0x2C;
 const CTRL_REG4 = 0x2D;
 
-const ELE = 1<<7;
-const OAE = 1<<6;
-const ZEFE = 1<<5;
-const YEFE = 1<<4;
-const XEFE = 1<<3;
-const DBCNTM = 1<<7;
-const WAKE_FF_MT = 1<<3;
-const IPOL = 1<<1;
-const INT_EN_FF_MT = 1<<2;
+const ELE = 1 << 7;
+const OAE = 1 << 6;
+const ZEFE = 1 << 5;
+const YEFE = 1 << 4;
+const XEFE = 1 << 3;
+const DBCNTM = 1 << 7;
+const WAKE_FF_MT = 1 << 3;
+const IPOL = 1 << 1;
+const INT_EN_FF_MT = 1 << 2;
 
-const wire = new i2c(address, {device: '/dev/i2c-1'}); // point to your i2c address, debug provides REPL interface
+const wire = new i2c(address, { device: '/dev/i2c-1' }); // point to your i2c address, debug provides REPL interface
 
 function read_registers(addressToRead, bytesToRead) {
   return new Promise((res, rej) => wire.readBytes(addressToRead, bytesToRead, (err, bytes) => err ? rej(err) : res(bytes)));
@@ -60,17 +60,17 @@ async function getAcceleration() {
 
   // Loop to calculate 12-bit ADC and g value for each axis
   const out = [];
-  for (let i = 0; i < 3 ; i++) {
-    let gCount = (rawData[i*2] << 8) | rawData[(i*2)+1];  //Combine the two 8 bit registers into one 12-bit number
+  for (let i = 0; i < 3; i++) {
+    let gCount = (rawData[i * 2] << 8) | rawData[(i * 2) + 1];  //Combine the two 8 bit registers into one 12-bit number
 
     gCount = (gCount >> 4); //The registers are left align, here we right align the 12-bit integer
 
     // If the number is negative, we have to make it so manually (no 12-bit data type)
-    if (rawData[i*2] > 0x7F) {
+    if (rawData[i * 2] > 0x7F) {
       gCount = -(1 + 0xFFF - gCount); // Transform into negative 2's complement
     }
 
-    out[i] = gCount / ((1<<12)/(2*GSCALE));
+    out[i] = gCount / ((1 << 12) / (2 * GSCALE));
   }
   return out;
 }
@@ -97,7 +97,7 @@ async function initialize() {
 
   // DBCNTM: clear debounce counter imediately
   // threshold for motion (0.063g*1 = 0.063g)
-  await write_register(FF_MT_THS, DBCNTM | 1);
+  await write_register(FF_MT_THS, DBCNTM | 0);
 
   // debounce time (0x80*1.25ms=160ms)
   await write_register(FF_MT_COUNT, 0x40);
@@ -109,14 +109,14 @@ async function initialize() {
   // INT_EN_FF_MT: interrupt on free-fall and/or motion
   await write_register(CTRL_REG4, INT_EN_FF_MT);
 
-  for(let i=0; i<0x31; i++){
+  for (let i = 0; i < 0x31; i++) {
     console.log('reg', i.toString(16), (await read_register(i)).toString(16));
   }
   // The default data rate is 800Hz and we don't modify it in this example code
   await mode_active();  // Set to active to start reading
 }
 
-async function getInterrupt(){
+async function getInterrupt() {
   return await read_register(FF_MT_SRC);
 }
 
