@@ -97,10 +97,10 @@ async function initialize() {
 
   // DBCNTM: clear debounce counter imediately
   // threshold for motion (0.063g*1 = 0.063g)
-  await write_register(FF_MT_THS, DBCNTM | 0);
+  await write_register(FF_MT_THS, DBCNTM | 1);
 
   // debounce time (0x80*1.25ms=160ms)
-  await write_register(FF_MT_COUNT, 0x40);
+  await write_register(FF_MT_COUNT, 0x20);
 
   // WAKE_FF_MT: wake up on motion
   // IPOL: interrupt is active high (rising edge)
