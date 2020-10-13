@@ -1,4 +1,4 @@
-const i2c = require('i2c');
+const i2c = require('i2c-bus');
 const address = 0x1C
 
 // Sets full-scale range to +/-2, 4, or 8g. Used to calc real g values.
@@ -28,19 +28,28 @@ const WAKE_FF_MT = 1 << 3;
 const IPOL = 1 << 1;
 const INT_EN_FF_MT = 1 << 2;
 
-const wire = new i2c(address, { device: '/dev/i2c-1' }); // point to your i2c address, debug provides REPL interface
+const wire = i2c.openPromisified(1); // point to your i2c address, debug provides REPL interface
 
-function read_registers(addressToRead, bytesToRead) {
-  return new Promise((res, rej) => wire.readBytes(addressToRead, bytesToRead, (err, bytes) => err ? rej(err) : res(bytes)));
+/**
+ * 
+ * @param {number} addressToRead 
+ * @param {number} bytesToRead 
+ */
+async function read_registers(addressToRead, bytesToRead) {
+  const x = await wire;
+  const { buffer } = await x.readI2cBlock(address, addressToRead, bytesToRead, Buffer.alloc(6));
+  return buffer;
 }
 
-function read_register(addressToRead) {
-  return new Promise((res, rej) => wire.readBytes(addressToRead, 1, (err, bytes) => err ? rej(err) : res(bytes[0])));
+async function read_register(addressToRead) {
+  const x = await wire
+  return x.readByte(address, addressToRead);
 }
 
 // Write a single byte to the register.
-function write_register(addressToWrite, dataToWrite) {
-  return new Promise((res, rej) => wire.writeBytes(addressToWrite, [dataToWrite], (err) => err ? rej(err) : res()));
+async function write_register(addressToWrite, dataToWrite) {
+  const x = await wire;
+  return x.writeByte(address, addressToWrite, dataToWrite);
 }
 
 // Sets the MMA8452 to standby mode. It must be in standby to change most register settings

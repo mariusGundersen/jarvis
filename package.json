@@ -10,17 +10,18 @@
   "author": "",
   "license": "ISC",
   "optionalDependencies": {
-    "gpio-promise": "^1.1.2",
-    "i2c": "^0.2.3",
-    "onoff": "^1.1.7"
+    "gpio-promise": "^1.1.2"
   },
   "dependencies": {
-    "koa": "^2.2.0",
-    "koa-router": "^7.1.1",
-    "koa-static": "^4.0.1",
-    "node-hue-api": "^2.4.2",
+    "epoll": "^4.0.0",
+    "i2c-bus": "^5.2.1",
+    "koa": "^2.13.0",
+    "koa-router": "^9.4.0",
+    "koa-static": "^5.0.0",
+    "node-hue-api": "^4.0.9",
+    "onoff": "^6.0.1",
     "prompt-promise": "^1.0.3",
-    "request": "^2.83.0",
-    "request-promise-native": "^1.0.8"
+    "request": "^2.88.2",
+    "request-promise-native": "^1.0.9"
   }
 }
