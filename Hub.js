@@ -1,12 +1,16 @@
-const HueApi = require('node-hue-api').HueApi;
+const v3 = require('node-hue-api').v3;
 
 module.exports = class Hub {
-  constructor(config) {
-    this.hub = new HueApi(config.bridge, config.username);
+  static async create(config) {
+    return new Hub(await v3.api.createLocal(config.ipAddress).connect(config.username));
+  };
+
+  constructor(hub) {
+    this.hub = hub;
   }
 
   async listScenes() {
-    const scenes = await this.hub.scenes();
+    const scenes = await this.hub.scenes.getAll();
     return scenes
       .sort((a, b) => a.name > b.name ? 1 : a.name < b.name ? -1 : 0)
       .map(s => s.name)
@@ -14,25 +18,23 @@ module.exports = class Hub {
   }
 
   async activateScene(name) {
-    const scenes = await this.hub.scenes();
+    const scenes = await this.hub.scenes.getAll();
     for (const scene of scenes.filter(scene => scene.name == name)) {
-      await this.hub.activateScene(scene.id);
+      await this.hub.scenes.activateScene(scene);
     }
   }
 
   async allOn() {
-    const lights = await this.hub.getLights();
-    console.log(lights);
-    for (const light in lights) {
-      this.hub.light(light).on();
+    const groups = await this.hub.groups.getAll();
+    for (const group of groups) {
+      await this.hub.groups.setGroupState(group, { on: true });
     }
   }
 
   async allOff() {
-    const lights = await this.hub.getLights();
-    console.log(lights);
-    for (const light in lights) {
-      this.hub.light(light).off();
+    const groups = await this.hub.groups.getAll();
+    for (const group of groups) {
+      await this.hub.groups.setGroupState(group, { on: false });
     }
   }
 

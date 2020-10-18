@@ -1,4 +1,4 @@
-@import url('icons/flaticon.css');
+@import url("icons/flaticon.css");
 
 * {
   margin: 0;
@@ -6,16 +6,18 @@
   cursor: none;
 }
 
-html, body {
-  height: 100%;
+html,
+body {
+  height: 480px;
+  width: 800px;
   overflow: hidden;
+  background: purple;
 }
 
 body {
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row;
+  display: grid;
   background: black;
+  grid-template-columns: 1fr;
 }
 
 *,
@@ -26,32 +28,32 @@ body {
 
 #scenes {
   display: flex;
-  flex-direction: column;
-  flex: 0 0 190px;
-  border-right: 6px solid black;
+  flex-direction: row-reverse;
+  justify-content: space-around;
 }
 
 #scenes .scene {
   display: block;
-  flex: 1 0 auto;
+  flex: 0 0 auto;
   text-align: center;
-  padding: 0 25px 0 1px;
+  padding: 10px;
   background: black;
   border: none;
-  border-left: 10px solid black;
   color: #777;
   font-size: 70px;
+  line-height: 1;
+  border-radius: 10px;
 }
 
-#scenes .scene[data-active=true]{
-  border-left: 10px solid white;
+#scenes .scene[data-active="true"] {
+  box-shadow: 0 0 10px 10px inset white, 0 0 10px 10px white;
 }
 
-#scenes .scene img{
+#scenes .scene img {
   width: 50px;
 }
 
-#wrapper{
+#wrapper {
   flex: 1 0 auto;
   display: flex;
   flex-direction: column;
@@ -82,7 +84,7 @@ body {
   font-family: monospace;
 }
 
-#clock .message{
+#clock .message {
   font-size: 40px;
   font-family: sans-serif;
 }

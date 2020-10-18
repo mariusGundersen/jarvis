@@ -8,16 +8,18 @@ const debug = process.env.DEBUG == "true" ? { dummy: true } : undefined;
 
 const screen = new Screen(debug);
 const accelerometer = new Accelerometer(debug);
-const hub = new Hub(config.hue);
+let hub;
 
 let isOutside = false;
 
 exports.start = async function () {
+
+  hub = await Hub.create(config.hue);
   await accelerometer.start({
     async onMotion() {
       if (isOutside) {
-        await hub.activateScene('Relax');
         isOutside = false;
+        await hub.activateScene('Relax');
       }
 
       await delay(1000);

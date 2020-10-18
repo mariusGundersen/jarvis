@@ -1,13 +1,11 @@
 import Clock from './Clock.js';
-import BikeMap from './BikeMap.js';
 import Lights from './Lights.js';
-import Screen from './Screen.js';
 import Meteogram from './Meteogram.js';
+import Screen from './Screen.js';
 
 // window.onerror = () => document.location.reload();
 
 const clock = new Clock(document.querySelector('#clock'));
-const bikeMap = new BikeMap(document.querySelector('#map'));
 const lights = new Lights(document.querySelector('#scenes'));
 const screen = new Screen();
 const meteogram = new Meteogram(document.querySelector('#weather'));
@@ -34,7 +32,6 @@ document.addEventListener('mousedown', async e => {
   clock.enable();
   if (await screen.isOff()) {
     await screen.turnOn();
-    await bikeMap.update();
     meteogram.load();
   }
 
