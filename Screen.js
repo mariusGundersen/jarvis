@@ -1,25 +1,25 @@
 const GpioPin = require('./Gpio');
 
-module.exports = class Screen{
-  constructor({dummy = false} = {dummy: false}){
-    if(dummy) {
+module.exports = class Screen {
+  constructor({ dummy = false } = { dummy: false }) {
+    if (dummy) {
       this.dummmyValue = true;
       return;
     }
     this.bgLed = new GpioPin(362, 'out');
   }
 
-  async get(){
-    if(!this.bgLed) {
+  async get() {
+    if (!this.bgLed) {
       return this.dummmyValue;
     }
 
     return this.bgLed.direction() == 'out';
   }
 
-  async on(){
+  async on() {
     console.log('turn on screen');
-    if(!this.bgLed) {
+    if (!this.bgLed) {
       this.dummmyValue = true;
       return;
     }
@@ -28,9 +28,9 @@ module.exports = class Screen{
     await this.bgLed.low().catch(logError);
   }
 
-  async off(){
+  async off() {
     console.log('turn off screen');
-    if(!this.bgLed) {
+    if (!this.bgLed) {
       this.dummmyValue = false;
       return;
     }
@@ -39,6 +39,6 @@ module.exports = class Screen{
   }
 };
 
-function logError(e){
+function logError(e) {
   console.error(e);
 }
