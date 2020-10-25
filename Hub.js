@@ -42,11 +42,9 @@ module.exports = class Hub {
     const weekdayBeedroom = 1;
     const weekendBedroom = 3;
     const weekdayHallway = 8;
-    const schedules = await this.hub.getSchedules();
     const status = sleep ? 'enabled' : 'disabled';
     await this.hub.updateSchedule(weekdayBeedroom, { status });
     await this.hub.updateSchedule(weekendBedroom, { status });
     await this.hub.updateSchedule(weekdayHallway, { status });
-    console.log(schedules.map(s => `${s.id}: ${s.name} - ${s.status}`));
   }
 }
