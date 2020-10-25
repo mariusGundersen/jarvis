@@ -6,7 +6,7 @@ const Accelerometer = require('./Accelerometer.js');
 
 const debug = process.env.DEBUG == "true" ? { dummy: true } : undefined;
 
-const screen = new Screen({ dummy: true });
+const screen = new Screen(debug);
 const accelerometer = new Accelerometer(debug);
 let hub;
 

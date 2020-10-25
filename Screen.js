@@ -13,15 +13,6 @@ module.exports = class Screen {
     return result.includes('0');
   }
 
-  async on() {
-    if (this.dummmyValue !== undefined) {
-      this.dummmyValue = true
-    } else {
-      console.log('turn on screen');
-      await fs.writeFile('/sys/class/backlight/rpi_backlight/bl_power', '0', 'ascii');
-    }
-  }
-
   /**
    * 
    * @param {boolean} value 
@@ -30,7 +21,7 @@ module.exports = class Screen {
     if (this.dummmyValue !== undefined) {
       this.dummmyValue = value
     } else {
-      await fs.writeFile('/sys/class/backlight/rpi_backlight/bl_power', value ? '0' : '1', 'ascii');
+      await fs.writeFile('/sys/class/backlight/rpi_backlight/bl_power', value ? '0\n' : '1\n', 'ascii');
     }
   }
 

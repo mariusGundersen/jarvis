@@ -1,9 +1,9 @@
-import { post, getJson, Delayer } from "./util.js";
+import { Delayer, getJson, post } from "./util.js";
 
 
 export default class Screen {
   constructor() {
-    this.delayer = new Delayer(60 * 1000);
+    this.delayer = new Delayer(20 * 1000);
   }
 
   async delay() {

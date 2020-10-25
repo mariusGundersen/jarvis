@@ -4,6 +4,9 @@ echo 'started' > node.log
 until ping -c1 github.com &>/dev/null; do : sleep 1; done
 echo 'pinged' >> node.log
 
+echo 'chmod' >> node.log
+sudo chmod 777 /sys/class/backlight/rpi_backlight/bl_power
+
 echo 'git pull' >> node.log
 git pull >> node.log
 echo 'npm install' >> node.log
