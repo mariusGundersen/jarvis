@@ -13,7 +13,7 @@ let hub;
 let isOutside = false;
 
 exports.start = async function () {
-
+  console.log('backend started');
   hub = await Hub.create(config.hue);
   await accelerometer.start({
     async onMotion() {

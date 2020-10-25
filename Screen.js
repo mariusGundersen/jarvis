@@ -1,12 +1,10 @@
-const GpioPin = require('./Gpio');
+const { promises: fs } = require('fs');
 
 module.exports = class Screen {
   constructor({ dummy = false } = { dummy: false }) {
     if (dummy) {
       this.dummmyValue = true;
-      return;
     }
-    this.bgLed = new GpioPin(362, 'out');
   }
 
   async get() {
@@ -19,23 +17,12 @@ module.exports = class Screen {
 
   async on() {
     console.log('turn on screen');
-    if (!this.bgLed) {
-      this.dummmyValue = true;
-      return;
-    }
-
-    await this.bgLed.out().catch(logError);
-    await this.bgLed.low().catch(logError);
+    await fs.writeFile('/sys/class/backlight/rpi_backlight/bl_power', '0', 'ascii');
   }
 
   async off() {
     console.log('turn off screen');
-    if (!this.bgLed) {
-      this.dummmyValue = false;
-      return;
-    }
-
-    await this.bgLed.in().catch(logError);
+    await fs.writeFile('/sys/class/backlight/rpi_backlight/bl_power', '1', 'ascii');
   }
 };
 
