@@ -27,6 +27,7 @@ const DBCNTM = 1 << 7;
 const WAKE_FF_MT = 1 << 3;
 const IPOL = 1 << 1;
 const INT_EN_FF_MT = 1 << 2;
+const LNOISE = 1 << 2;
 
 const wire = i2c.openPromisified(1); // point to your i2c address, debug provides REPL interface
 
@@ -109,7 +110,10 @@ async function initialize() {
   await write_register(FF_MT_THS, DBCNTM | 1);
 
   // debounce time (0x80*1.25ms=160ms)
-  await write_register(FF_MT_COUNT, 0x20);
+  await write_register(FF_MT_COUNT, 0x10);
+
+  // LNOISE | Enable low noise sensing
+  await write_register(CTRL_REG1, LNOISE);
 
   // WAKE_FF_MT: wake up on motion
   // IPOL: interrupt is active high (rising edge)
