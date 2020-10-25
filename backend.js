@@ -17,10 +17,12 @@ exports.start = async function () {
   hub = await Hub.create(config.hue);
   await accelerometer.start({
     async onMotion() {
-      if (isOutside) {
-        isOutside = false;
-        await hub.activateScene('Relax');
+      while (!isOutside) {
+        await delay(1000);
       }
+
+      isOutside = false;
+      await hub.activateScene('Relax');
 
       await delay(1000);
     }
