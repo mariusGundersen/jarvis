@@ -12,7 +12,8 @@ module.exports = class Screen {
       return this.dummmyValue;
     }
 
-    return this.bgLed.direction() == 'out';
+    const result = await fs.readFile('/sys/class/backlight/rpi_backlight/bl_power', 'ascii');
+    return result.includes('0');
   }
 
   async on() {
