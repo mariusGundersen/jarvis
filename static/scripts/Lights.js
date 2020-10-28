@@ -1,4 +1,4 @@
-import { template, post, Delayer } from './util.js';
+import { Delayer, post, template } from './util.js';
 
 export default class Lights {
   constructor(element) {
@@ -25,6 +25,10 @@ export default class Lights {
 
   async setStatus(status) {
     await post(`/setStatus/${status}`);
+  }
+
+  async setDarkerScene(name) {
+    await post(`/scene/${name}/only-if-on`);
   }
 
   async setScene(name) {

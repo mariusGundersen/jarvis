@@ -7,10 +7,25 @@ module.exports = class Hub {
 
   /**
    * 
-   * @param {import('node-hue-api/lib/api/index')} hub 
+   * @param {import('node-hue-api/lib/api/Api')} hub 
    */
   constructor(hub) {
     this.hub = hub;
+  }
+
+  async getGroupScenes(){
+    const scenes = await this.hub.scenes.getAll();
+
+    return await Promise.all(scenes
+      .filter(s => s.type === 'GroupScene')
+      .map(async s => [s.name, s.group, (await this.hub.groups.getGroup(s.group)).state.all_on]));
+  }
+
+  async getRooms(){
+    const groups = await this.hub.groups.getRooms();
+
+    return groups
+      .map(g => [g.name, g.state]);
   }
 
   async listScenes() {
@@ -21,11 +36,21 @@ module.exports = class Hub {
       .filter((e, i, c) => c.indexOf(e) === i);
   }
 
-  async activateScene(name) {
+  async activateScene(name, onlyIfOn=false) {
     const scenes = await this.hub.scenes.getAll();
-    await Promise.all(scenes
-      .filter(scene => scene.name == name)
-      .map(scene => this.hub.scenes.activateScene(scene)));
+    const targetScenes = scenes.filter(s => s.name === name);
+
+    await Promise.all(targetScenes
+      .map(async scene => {
+        if(onlyIfOn){
+          const group = await this.hub.groups.getGroup(scene.group);
+          if(group.state.all_on){
+            await this.hub.scenes.activateScene(scene);
+          }
+        }else{
+          await this.hub.scenes.activateScene(scene);
+        }
+      }));
   }
 
   async allOn() {

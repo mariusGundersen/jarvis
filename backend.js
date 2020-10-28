@@ -4,18 +4,17 @@ const Hub = require('./Hub.js');
 const Screen = require('./Screen.js');
 const Accelerometer = require('./Accelerometer.js');
 
-const debug = process.env.DEBUG == "true" ? { dummy: true } : undefined;
-
-const screen = new Screen(debug);
-const accelerometer = new Accelerometer(debug);
-let hub;
-
-let isOutside = false;
-
-exports.start = async function () {
+exports.start = async function (debug) {
   console.log('backend started');
-  hub = await Hub.create(config.hue);
-  await accelerometer.start({
+  
+  const screen = new Screen(debug);
+  const accelerometer = new Accelerometer(debug);
+  
+  let isOutside = false;
+
+  const hub = await Hub.create(config.hue);
+  
+  accelerometer.start({
     async onMotion() {
       while (!isOutside) {
         await delay(1000);
@@ -27,32 +26,35 @@ exports.start = async function () {
       await delay(1000);
     }
   }).catch(r => console.error(r));
-}
 
-exports.getScreen = async function () {
-  return await screen.get();
-}
+  return {
+    async getScreen () {
+      return await screen.get();
+    },
 
-exports.setScreen = async function (on) {
-  if (on) {
-    await screen.on();
-  } else {
-    await screen.off();
+    async setScreen (on) {
+      if (on) {
+        await screen.on();
+      } else {
+        await screen.off();
+      }
+    },
+
+    async activateScene (name, onlyIfOn=false) {
+      await hub.activateScene(name, onlyIfOn);
+    },
+
+    async setStatus (status) {
+      isOutside = status === 'outside';
+      await hub.wakeUpInMorning(status === 'sleep');
+    },
+
+    async listScenes () {
+      return await hub.listScenes();
+    }
   }
 }
 
-exports.activateScene = async function (name) {
-  await hub.activateScene(name);
-}
-
-exports.setStatus = async function (status) {
-  isOutside = status === 'outside';
-  await hub.wakeUpInMorning(status === 'sleep');
-}
-
-exports.listScenes = async function () {
-  return await hub.listScenes();
-}
 
 function delay(ms) {
   return new Promise(res => setTimeout(res, ms));

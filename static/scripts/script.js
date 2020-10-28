@@ -42,7 +42,7 @@ document.addEventListener('mousedown', async e => {
 
 async function goToBed() {
   clock.setMessage('Sov godt &#x1F634;');
-  await lights.setScene('Nightlight');
+  await lights.setDarkerScene('Nightlight');
   await lights.delay();
   await lights.setScene('Off');
   await lights.setStatus('sleep');
@@ -51,7 +51,7 @@ async function goToBed() {
 
 async function leaveHome() {
   clock.setMessage('Ha det bra &#x1F44B;');
-  await lights.setScene('Nightlight');
+  await lights.setDarkerScene('Nightlight');
   await lights.delay();
   await lights.setScene('Off');
   await lights.setStatus('outside');
