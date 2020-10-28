@@ -5,6 +5,10 @@ module.exports = class Hub {
     return new Hub(await v3.api.createLocal(config.ipAddress).connect(config.username));
   };
 
+  /**
+   * 
+   * @param {import('node-hue-api/lib/api/index')} hub 
+   */
   constructor(hub) {
     this.hub = hub;
   }
@@ -19,23 +23,19 @@ module.exports = class Hub {
 
   async activateScene(name) {
     const scenes = await this.hub.scenes.getAll();
-    for (const scene of scenes.filter(scene => scene.name == name)) {
-      await this.hub.scenes.activateScene(scene);
-    }
+    await Promise.all(scenes
+      .filter(scene => scene.name == name)
+      .map(scene => this.hub.scenes.activateScene(scene)));
   }
 
   async allOn() {
     const groups = await this.hub.groups.getAll();
-    for (const group of groups) {
-      await this.hub.groups.setGroupState(group, { on: true });
-    }
+    await Promise.all(groups.map(group => this.hub.groups.setGroupState(group, { on: true })));
   }
 
   async allOff() {
     const groups = await this.hub.groups.getAll();
-    for (const group of groups) {
-      await this.hub.groups.setGroupState(group, { on: false });
-    }
+    await Promise.all(groups.map(group => this.hub.groups.setGroupState(group, { on: false })));
   }
 
   async wakeUpInMorning(sleep) {
