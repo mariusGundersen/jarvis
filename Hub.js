@@ -63,13 +63,21 @@ module.exports = class Hub {
     await Promise.all(groups.map(group => this.hub.groups.setGroupState(group, { on: false })));
   }
 
+  async getSchedules(){
+    return await this.hub.schedules.getAll();
+  }
+
   async wakeUpInMorning(sleep) {
-    const weekdayBeedroom = 1;
-    const weekendBedroom = 3;
-    const weekdayHallway = 8;
+    const ids = {
+      weekdayBeedroom: 1,
+      weekendBedroom: 3,
+      weekdayHallway: 8,
+    };
     const status = sleep ? 'enabled' : 'disabled';
-    await this.hub.updateSchedule(weekdayBeedroom, { status });
-    await this.hub.updateSchedule(weekendBedroom, { status });
-    await this.hub.updateSchedule(weekdayHallway, { status });
+    for(const id of Object.values(ids)){
+      const schedule = await this.hub.schedules.getSchedule(id);
+      schedule.status = status;
+      await this.hub.schedules.updateSchedule(schedule);
+    }
   }
 }
