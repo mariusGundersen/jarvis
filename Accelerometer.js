@@ -14,6 +14,8 @@ module.exports = class Accelerometer {
     await i2c.getInterrupt();
     this.interruptPin.watch(async function (err, value) {
       console.log('rising-edge', value);
+      const accel = await i2c.getAcceleration();
+      console.log('accel', accel);
       await onMotion().catch(e => console.warn(e));
       console.log('change', value, (await i2c.getInterrupt()).toString(16));
     });
