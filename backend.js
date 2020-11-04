@@ -6,33 +6,31 @@ const Accelerometer = require('./Accelerometer.js');
 
 exports.start = async function (debug) {
   console.log('backend started');
-  
+
   const screen = new Screen(debug);
   const accelerometer = new Accelerometer(debug);
-  
+
   let isOutside = false;
 
   const hub = await Hub.create(config.hue);
-  
+
   accelerometer.start({
     async onMotion() {
-      while (!isOutside) {
-        await delay(1000);
+      if (isOutside) {
+        isOutside = false;
+        await hub.activateScene('Relax');
       }
-
-      isOutside = false;
-      await hub.activateScene('Relax');
 
       await delay(1000);
     }
   }).catch(r => console.error(r));
 
   return {
-    async getScreen () {
+    async getScreen() {
       return await screen.get();
     },
 
-    async setScreen (on) {
+    async setScreen(on) {
       if (on) {
         await screen.on();
       } else {
@@ -40,16 +38,22 @@ exports.start = async function (debug) {
       }
     },
 
-    async activateScene (name, onlyIfOn=false) {
+    async activateScene(name, onlyIfOn = false) {
       await hub.activateScene(name, onlyIfOn);
     },
 
-    async setStatus (status) {
+    async setStatus(status) {
       isOutside = status === 'outside';
+      if (isOutside) {
+        console.log('Turn on ligts next time the door opens');
+      } else {
+        console.log('disabled door sensor');
+      }
+
       await hub.wakeUpInMorning(status === 'sleep');
     },
 
-    async listScenes () {
+    async listScenes() {
       return await hub.listScenes();
     }
   }

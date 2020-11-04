@@ -11,15 +11,15 @@ module.exports = class Accelerometer {
     if (!this.interruptPin) return;
     await i2c.initialize();
     console.log('setup interrupt');
-    await i2c.getInterrupt();
+    await i2c.resetInterrupt();
     this.interruptPin.watch(async function (err, value) {
       console.log('rising-edge', value);
       const accel = await i2c.getAcceleration();
       console.log('accel', accel);
       await onMotion().catch(e => console.warn(e));
-      console.log('change', value, (await i2c.getInterrupt()).toString(16));
+      console.log('change', value, (await i2c.resetInterrupt()).toString(16));
     });
-    const r = await i2c.getInterrupt();
+    const r = await i2c.resetInterrupt();
     console.log('on rising edge', r.toString(16));
   }
 };

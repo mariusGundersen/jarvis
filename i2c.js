@@ -85,6 +85,12 @@ async function getAcceleration() {
   return out;
 }
 
+async function setInterrupt(enable = false) {
+
+  // INT_EN_FF_MT: interrupt on free-fall and/or motion
+  await write_register(CTRL_REG4, enable ? INT_EN_FF_MT : 0);
+}
+
 async function initialize() {
   const c = await read_register(WHO_AM_I);  // Read WHO_AM_I register
   if (c == 0x2A) { // WHO_AM_I should always return 0x2A
@@ -107,7 +113,7 @@ async function initialize() {
 
   // DBCNTM: clear debounce counter imediately
   // threshold for motion (0.063g*1 = 0.063g)
-  await write_register(FF_MT_THS, DBCNTM | 2);
+  await write_register(FF_MT_THS, DBCNTM | 1);
 
   // debounce time (0x80*1.25ms=160ms)
   await write_register(FF_MT_COUNT, 0x10);
@@ -129,7 +135,8 @@ async function initialize() {
   await mode_active();  // Set to active to start reading
 }
 
-async function getInterrupt() {
+async function resetInterrupt() {
+  // Reads the interrupt and thereby resets ready for a new one
   return await read_register(FF_MT_SRC);
 }
 
@@ -137,4 +144,5 @@ exports.initialize = initialize;
 exports.getAcceleration = getAcceleration;
 exports.mode_active = mode_active;
 exports.mode_standby = mode_standby;
-exports.getInterrupt = getInterrupt;
+exports.resetInterrupt = resetInterrupt;
+exports.setInterrupt = setInterrupt;
