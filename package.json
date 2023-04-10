@@ -18,7 +18,7 @@
     "koa": "^2.2.0",
     "koa-router": "^7.1.1",
     "koa-static": "^4.0.1",
-    "node-hue-api": "^2.4.2",
+    "node-hue-api": "^5.0.0-beta.16",
     "prompt-promise": "^1.0.3",
     "request": "^2.83.0",
     "request-promise-native": "^1.0.8"
